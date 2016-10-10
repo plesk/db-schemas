@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Copyright 1999-2015. Parallels IP Holdings GmbH. All Rights Reserved. -->
+<!-- Copyright 1999-2016. Parallels IP Holdings GmbH. All Rights Reserved. -->
 <pleskdb version="8.2">
   <table name="accounts">
     <description>Storage of passwords for different types of accounts</description>
@@ -802,6 +802,30 @@
       <field name="descr" value="MSSQL database soft quota reached"/>
       <field name="enabled" value="true"/>
     </row>
+    <row>
+      <field name="id" value="135"/>
+      <field name="name" value="domain_plan_change"/>
+      <field name="descr" value="Subscription plan change"/>
+      <field name="enabled" value="true"/>
+    </row>
+    <row>
+      <field name="id" value="136"/>
+      <field name="name" value="admin_preferences_update"/>
+      <field name="descr" value="Administrator preferences updated"/>
+      <field name="enabled" value="true"/>
+    </row>
+    <row>
+      <field name="id" value="137"/>
+      <field name="name" value="domain_usage_size_update"/>
+      <field name="descr" value="Subscription's disk space usage updated"/>
+      <field name="enabled" value="true"/>
+    </row>
+    <row>
+      <field name="id" value="138"/>
+      <field name="name" value="domain_usage_traffic_update"/>
+      <field name="descr" value="Subscription's traffic usage updated"/>
+      <field name="enabled" value="true"/>
+    </row>
   </table>
   <table name="admin_aliases">
     <description>Additional admins</description>
@@ -822,19 +846,6 @@
     <column name="val" type="varchar(255)" null="YES"/>
     <index table="admin_aliases_param" non_unique="0" key_name="PRIMARY" column_name="alias_id" Collation="A"/>
     <index table="admin_aliases_param" non_unique="0" key_name="PRIMARY" column_name="param" Collation="A"/>
-  </table>
-  <table name="ai_vendor_sources" platform="LINUX">
-    <description>Sources of operating system updates</description>
-    <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="type" type="enum('repomd','directory')"/>
-    <column name="url" type="varchar(255)"/>
-    <column name="priority" type="int(10) unsigned" default="500"/>
-    <column name="enabled" type="enum('false','true')" default="true"/>
-    <column name="auth_required" type="enum('false','true')" default="false"/>
-    <column name="login" type="varchar(255)" null="YES"/>
-    <column name="password" type="varchar(255)" null="YES"/>
-    <index table="ai_vendor_sources" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
-    <index table="ai_vendor_sources" non_unique="0" key_name="url" column_name="url" Collation="A"/>
   </table>
   <table name="apscategories">
     <description>[Unnecessary?]</description>
@@ -996,6 +1007,12 @@
     <index table="avstatistics" non_unique="0" key_name="type" column_name="type" Collation="A" platform="LINUX"/>
     <index table="avstatistics" non_unique="0" key_name="type" column_name="date" Collation="A" platform="LINUX"/>
   </table>
+  <table name="BackupExcludeFiles">
+    <description>List of files to exclude from backup</description>
+    <column name="id" type="int(10) unsigned" extra="auto_increment"/>
+    <column name="files" type="text" null="YES"/>
+    <index table="BackupExcludeFiles" key_name="PRIMARY" column_name="id" non_unique="0" Collation="A"/>
+  </table>
   <table name="BackupsScheduled">
     <description>Scheduled backup settings</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
@@ -1018,6 +1035,8 @@
     <column name="content_type" type="enum('backup_content_all_at_domain','backup_content_vhost_only','backup_content_mail_only')" default="backup_content_all_at_domain"/>
     <column name="full_backup_period" type="int(11) unsigned" default="0"/>
     <column name="mssql_native_backup" type="int(1)" default="1"/>
+    <column name="backupExcludeFilesId" type="int(10) unsigned" null="YES" foreign_key="BackupExcludeFiles.id" delete_cascade="YES"/>
+    <column name="backupExcludeLogs" type="int(1)" default="0"/>
     <index table="BackupsScheduled" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
   </table>
   <table name="BackupsSettings">
@@ -1204,6 +1223,7 @@
     <index table="Configurations" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="Configurations" non_unique="1" key_name="objectTypeAndId_index" column_name="objectType" Collation="A"/>
     <index table="Configurations" non_unique="1" key_name="objectTypeAndId_index" column_name="objectId" Collation="A"/>
+    <index table="Configurations" key_name="status" column_name="status" non_unique="1" Collation="A"/>
   </table>
   <table name="cp_access">
     <description>IP access restriction</description>
@@ -1245,6 +1265,12 @@
     <index table="data_bases" non_unique="0" key_name="name_and_db_server_id" column_name="db_server_id" Collation="A" platform="LINUX"/>
     <index table="data_bases" non_unique="1" key_name="dom_id" column_name="dom_id" Collation="A" platform="LINUX"/>
     <index table="data_bases" non_unique="1" key_name="db_server_id" column_name="db_server_id" Collation="A" platform="LINUX"/>
+  </table>
+  <table name="DatabaseCustomHosts">
+    <description>Database custom hosts storage</description>
+    <column name="id" type="int(10) unsigned" foreign_key="data_bases.id" delete_cascade="YES"/>
+    <column name="host" type="varchar(255)"/>
+    <index table="DatabaseCustomHosts" key_name="PRIMARY" column_name="id" non_unique="0" Collation="A"/>
   </table>
   <table name="DatabaseServers">
     <description>Database servers</description>
@@ -1362,8 +1388,8 @@
     <description>DNS resource records</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
     <column name="dns_zone_id" type="int(10) unsigned" null="YES" foreign_key="dns_zone.id" delete_cascade="YES"/>
-    <column name="type" type="enum('NS','A','AAAA','CNAME','MX','PTR','TXT','AXFR','SRV','master','none')" default="A" platform="WIN"/>
-    <column name="type" type="enum('NS','A','AAAA','CNAME','MX','PTR','TXT','SRV','master','none')" default="A" platform="LINUX"/>
+    <column name="type" type="enum('NS','A','AAAA','CNAME','MX','PTR','TXT','AXFR','SRV','DS','master','none')" default="A" platform="WIN"/>
+    <column name="type" type="enum('NS','A','AAAA','CNAME','MX','PTR','TXT','SRV','DS','master','none')" default="A" platform="LINUX"/>
     <column name="host" type="varchar(255)"/>
     <column name="displayHost" type="varchar(255)"/>
     <column name="val" type="varchar(255)"/>
@@ -1553,13 +1579,22 @@
       <field name="displayVal" value="&lt;domain&gt;."/>
       <field name="opt" value=""/>
     </row>
-    <row platform="LINUX">
+    <row>
       <field name="id" value="19"/>
       <field name="type" value="TXT"/>
       <field name="host" value="&lt;domain&gt;."/>
       <field name="displayHost" value="&lt;domain&gt;."/>
-      <field name="val" value="v=spf1 +a +mx -all +a:&lt;hostname&gt;"/>
-      <field name="displayVal" value="v=spf1 +a +mx -all +a:&lt;hostname&gt;"/>
+      <field name="val" value="v=spf1 +a +mx +a:&lt;hostname&gt; -all"/>
+      <field name="displayVal" value="v=spf1 +a +mx +a:&lt;hostname&gt; -all"/>
+      <field name="opt" value=""/>
+    </row>
+    <row>
+      <field name="id" value="20"/>
+      <field name="type" value="TXT"/>
+      <field name="host" value="_dmarc.&lt;domain&gt;."/>
+      <field name="displayHost" value="_dmarc.&lt;domain&gt;."/>
+      <field name="val" value="v=DMARC1; p=none"/>
+      <field name="displayVal" value="v=DMARC1; p=none"/>
       <field name="opt" value=""/>
     </row>
   </table>
@@ -1873,7 +1908,7 @@
       <field name="type" value="white"/>
     </row>
     <row>
-      <field name="domain" value="*odin.com"/>
+      <field name="domain" value="*plesk.com"/>
       <field name="type" value="white"/>
     </row>
     <row>
@@ -1886,6 +1921,18 @@
     </row>
     <row>
       <field name="domain" value="*rambler.ru"/>
+      <field name="type" value="white"/>
+    </row>
+    <row>
+      <field name="domain" value="*.office365.com"/>
+      <field name="type" value="white"/>
+    </row>
+    <row>
+      <field name="domain" value="*.outlook.office.com"/>
+      <field name="type" value="white"/>
+    </row>
+    <row>
+      <field name="domain" value="*.outlook.com"/>
       <field name="type" value="white"/>
     </row>
     <row>
@@ -1955,23 +2002,21 @@
     <column name="cgi" type="enum('false','true')" default="false"/>
     <column name="perl" type="enum('false','true')" default="false"/>
     <column name="python" type="enum('false','true')" default="false"/>
-    <column name="coldfusion" type="enum('false','true')" default="false"/>
     <column name="asp" type="enum('false','true')" default="false"/>
     <column name="asp_dot_net" type="enum('false','true')" default="false"/>
-    <column name="managed_runtime_version" type="varchar(255)" default="1.1"/>
-    <column name="miva" type="enum('false','true')" default="false"/>
+    <column name="managed_runtime_version" type="varchar(255)" default=""/>
     <column name="ssl" type="enum('false','true')" default="false"/>
     <column name="webstat" type="varchar(20)" default="none"/>
     <column name="at_domains" type="enum('false','true')" default="false"/>
     <column name="write_modify" type="varchar(255)" null="YES"/>
     <column name="www_root" type="text"/>
-    <column name="maintenance_mode" type="enum('false','true')" default="false"/>
     <column name="webdeploy" type="enum('false','true')" default="false"/>
     <column name="certificate_id" type="int(10) unsigned" null="YES" default="0" foreign_key="certificates.id"/>
     <column name="traffic_bandwidth" type="int(11)" null="YES" default="-1"/>
     <column name="max_connection" type="int(11)" null="YES" default="-1"/>
     <column name="fastcgi" type="enum('false','true')" default="false" platform="LINUX"/>
     <column name="same_ssl" type="enum('false','true')" default="true" platform="LINUX"/>
+    <column name="sslRedirect" type="enum('true','false')" default="false"/>
     <index table="hosting" non_unique="0" key_name="PRIMARY" column_name="dom_id" Collation="A"/>
   </table>
   <table name="hotlink_friends">
@@ -2546,6 +2591,7 @@
     <column name="description" type="varchar(255)" null="YES"/>
     <column name="icon" type="varchar(255)"/>
     <column name="plesk_max_version" type="varchar(30)" null="YES"/>
+    <column name="status" type="enum('true','false')" default="true"/>
     <index table="Modules" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="Modules" non_unique="0" key_name="name" column_name="name" Collation="A"/>
   </table>
@@ -2577,6 +2623,29 @@
     <column name="note_id" type="int(10) unsigned" null="YES" foreign_key="Notes.id"/>
     <index table="Notifications" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="Notifications" non_unique="1" key_name="note_id" column_name="note_id" Collation="A"/>
+  </table>
+  <table name="PackageUpdateLocks">
+    <description>Packages update locks</description>
+    <column name="id" type="int(10) unsigned" extra="auto_increment"/>
+    <column name="serviceNodeId" type="int(10) unsigned" foreign_key="ServiceNodes.id" delete_cascade="YES"/>
+    <column name="package" type="varchar(255)"/>
+    <index table="PackageUpdateLocks" key_name="PRIMARY" column_name="id" non_unique="0" Collation="A"/>
+    <index table="PackageUpdateLocks" key_name="serviceNodeId" column_name="serviceNodeId" non_unique="1" Collation="A"/>
+    <index table="PackageUpdateLocks" key_name="package" column_name="serviceNodeId" non_unique="0" Collation="A"/>
+    <index table="PackageUpdateLocks" key_name="package" column_name="package" non_unique="0" Collation="A"/>
+  </table>
+  <table name="PackageUpdateNotifications">
+    <description>Packages update notifications</description>
+    <column name="id" type="int(10) unsigned" extra="auto_increment"/>
+    <column name="serviceNodeId" type="int(10) unsigned" foreign_key="ServiceNodes.id" delete_cascade="YES"/>
+    <column name="eventDate" type="datetime" default="0000-00-00 00:00:00"/>
+    <column name="notificationSent" type="int(1)" default="0"/>
+    <column name="data" type="mediumtext" null="YES"/>
+    <index table="PackageUpdateNotifications" key_name="PRIMARY" column_name="id" non_unique="0" Collation="A"/>
+    <index table="PackageUpdateNotifications" key_name="serviceNodeId" column_name="serviceNodeId" non_unique="1" Collation="A"/>
+    <index table="PackageUpdateNotifications" key_name="eventDate" column_name="serviceNodeId" non_unique="0" Collation="A"/>
+    <index table="PackageUpdateNotifications" key_name="eventDate" column_name="eventDate" non_unique="0" Collation="A"/>
+    <index table="PackageUpdateNotifications" key_name="notificationSent" column_name="notificationSent" non_unique="1" Collation="A"/>
   </table>
   <table name="Parameters">
     <description>Parameters</description>
@@ -2677,7 +2746,7 @@
     <description>Schema versions storage</description>
     <column name="version" type="varchar(14)"/>
     <row>
-      <field name="version" value="20150721115909"/>
+      <field name="version" value="20160801055235"/>
     </row>
   </table>
   <table name="Subscriptions">
@@ -3599,32 +3668,6 @@
     <index table="SessionContexts" non_unique="0" key_name="PRIMARY" column_name="contextId" Collation="A"/>
     <index table="SessionContexts" non_unique="1" key_name="sessionId" column_name="sessionId" Collation="A"/>
   </table>
-  <table name="SharedSslDomains">
-    <description>Domains providing shared SSL certificates (used on Windows only)</description>
-    <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="serviceNodeId" type="int(10) unsigned" default="1" foreign_key="ServiceNodes.id"/>
-    <column name="clientId" type="int(10) unsigned" foreign_key="clients.id"/>
-    <column name="domainId" type="int(10) unsigned" foreign_key="domains.id"/>
-    <index table="SharedSslDomains" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
-    <index table="SharedSslDomains" non_unique="0" key_name="domainId" column_name="serviceNodeId" Collation="A"/>
-    <index table="SharedSslDomains" non_unique="0" key_name="domainId" column_name="clientId" Collation="A"/>
-    <index table="SharedSslDomains" non_unique="0" key_name="domainId" column_name="domainId" Collation="A"/>
-  </table>
-  <table name="shared_ssl_links">
-    <description>Domains using shared SSL certificates (used on Windows only)</description>
-    <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="sharedSslId" type="int(10) unsigned" foreign_key="SharedSslDomains.id"/>
-    <column name="name" type="varchar(255)"/>
-    <column name="require_ssl" type="enum('false','true')" default="false"/>
-    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id"/>
-    <column name="dom_type" type="enum('domain','subdomain')" default="domain"/>
-    <column name="target" type="varchar(255)" default="httpdocs"/>
-    <index table="shared_ssl_links" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
-    <index table="shared_ssl_links" non_unique="0" key_name="dom_id" column_name="dom_id" Collation="A"/>
-    <index table="shared_ssl_links" non_unique="0" key_name="dom_id" column_name="dom_type" Collation="A"/>
-    <index table="shared_ssl_links" non_unique="0" key_name="name" column_name="name" Collation="A"/>
-    <index table="shared_ssl_links" non_unique="1" key_name="sharedSslId" column_name="sharedSslId" Collation="A"/>
-  </table>
   <table name="SiteAppsHitsStat">
     <description>[Unnecessary?]</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
@@ -3740,7 +3783,6 @@
     <column name="asp" type="enum('false','true')" default="false"/>
     <column name="asp_dot_net" type="enum('false','true')" default="false"/>
     <column name="managed_runtime_version" type="varchar(255)" default="1.1" platform="WIN"/>
-    <column name="miva" type="enum('false','true')" default="false"/>
     <column name="ssl" type="enum('false','true')" default="false"/>
     <column name="server_id" type="varchar(255)" platform="WIN"/>
     <column name="www_root" type="varchar(255)" default="httpdocs"/>
@@ -3856,7 +3898,6 @@
     <column name="asp" type="enum('false','true')" default="false"/>
     <column name="asp_dot_net" type="enum('false','true')" default="false"/>
     <column name="managed_runtime_version" type="varchar(255)" default="1.1"/>
-    <column name="miva" type="enum('false','true')" default="false"/>
     <column name="write_modify" type="varchar(255)" null="YES"/>
     <column name="fastcgi" type="enum('false','true')" default="false"/>
     <index table="web_users" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
@@ -3871,28 +3912,6 @@
     <column name="domain_service_id" type="int(10) unsigned" default="0" foreign_key="DomainServices.id"/>
     <index table="WebApps" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="WebApps" non_unique="1" key_name="domain_service_id" column_name="domain_service_id" Collation="A"/>
-  </table>
-  <table name="cf_dsn">
-    <description>Coldfusion DSN</description>
-    <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="domain_id" type="int(10) unsigned" foreign_key="domains.id" delete_cascade="YES"/>
-    <column name="dsn_name" type="varchar(64)"/>
-    <column name="driver_name" type="varchar(255)"/>
-    <column name="description" type="varchar(255)" null="YES"/>
-    <column name="is_valid" type="enum('false','true')" default="false"/>
-    <index table="cf_dsn" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
-    <index table="cf_dsn" non_unique="1" key_name="domain_id" column_name="domain_id" Collation="A"/>
-    <index table="cf_dsn" non_unique="0" key_name="dsn_name" column_name="domain_id" Collation="A"/>
-    <index table="cf_dsn" non_unique="0" key_name="dsn_name" column_name="dsn_name" Collation="A"/>
-  </table>
-  <table name="cf_dsn_params">
-    <description>Coldfusion DSN key-value params</description>
-    <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="cf_dsn_id" type="int(10) unsigned" foreign_key="cf_dsn.id" delete_cascade="YES"/>
-    <column name="name" type="varchar(64)"/>
-    <column name="value" type="varchar(255)" null="YES"/>
-    <index table="cf_dsn_params" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
-    <index table="cf_dsn_params" non_unique="1" key_name="dsn_id" column_name="cf_dsn_id" Collation="A"/>
   </table>
   <table name="PersistentCache">
     <description>File based cache links</description>
@@ -4131,6 +4150,7 @@
     <column name="version" type="varchar(255)" null="YES"/>
     <column name="description" type="varchar(255)" null="YES"/>
     <column name="shown" type="int(11)" null="YES" default="0"/>
+    <column name="codename" type="varchar(255)" null="YES"/>
     <index table="smb_productUpgrades" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
   </table>
   <table name="smb_apsCategories">
@@ -4629,33 +4649,6 @@
     <column name="value" type="text" null="YES"/>
     <index table="WebServerSettingsParameters" non_unique="0" key_name="PRIMARY" column_name="webServerSettingsId" Collation="A"/>
     <index table="WebServerSettingsParameters" non_unique="0" key_name="PRIMARY" column_name="name" Collation="A"/>
-  </table>
-  <table name="WordpressInstances">
-    <description>Instances of WordPress</description>
-    <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="subscriptionId" type="int(10) unsigned" foreign_key="Subscriptions.id" delete_cascade="YES"/>
-    <column name="path" type="varchar(255)"/>
-    <column name="isIgnored" type="int(11)" default="0"/>
-    <column name="apsInstanceId" type="int(11) unsigned" null="YES" foreign_key="smb_apsInstances.id" delete_cascade="YES"/>
-    <index table="WordpressInstances" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
-    <index table="WordpressInstances" non_unique="1" key_name="subscriptionId_idx" column_name="subscriptionId" Collation="A"/>
-    <index table="WordpressInstances" non_unique="0" key_name="path" column_name="subscriptionId" Collation="A"/>
-    <index table="WordpressInstances" non_unique="0" key_name="path" column_name="path" Collation="A"/>
-  </table>
-  <table name="WordpressInstanceProperties">
-    <description>WordPress instance key-value params</description>
-    <column name="wordpressInstanceId" type="int(10) unsigned" foreign_key="WordpressInstances.id" delete_cascade="YES"/>
-    <column name="name" type="varchar(255)"/>
-    <column name="value" type="mediumtext"/>
-    <index table="WordpressInstanceProperties" non_unique="0" key_name="PRIMARY" column_name="wordpressInstanceId" Collation="A"/>
-    <index table="WordpressInstanceProperties" non_unique="0" key_name="PRIMARY" column_name="name" Collation="A"/>
-  </table>
-  <table name="WordpressInstancesDomains">
-    <description>Wordress instance-domain mapping</description>
-    <column name="wordpressInstanceId" type="int(10) unsigned" foreign_key="WordpressInstances.id" delete_cascade="YES"/>
-    <column name="domainId" type="int(10) unsigned" foreign_key="domains.id" delete_cascade="YES"/>
-    <index table="WordpressInstancesDomains" non_unique="0" key_name="PRIMARY" column_name="wordpressInstanceId" Collation="A"/>
-    <index table="WordpressInstancesDomains" non_unique="0" key_name="PRIMARY" column_name="domainId" Collation="A"/>
   </table>
   <table name="BlUpgrades">
     <description>Bl upgrades task log</description>
