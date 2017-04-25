@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Copyright 1999-2016. Parallels IP Holdings GmbH. All Rights Reserved. -->
+<!-- Copyright 1999-2017. Parallels IP Holdings GmbH. All Rights Reserved. -->
 <pleskdb version="8.2">
   <table name="accounts">
     <description>Storage of passwords for different types of accounts</description>
@@ -826,6 +826,36 @@
       <field name="descr" value="Subscription's traffic usage updated"/>
       <field name="enabled" value="true"/>
     </row>
+    <row>
+      <field name="id" value="139"/>
+      <field name="name" value="extension_install"/>
+      <field name="descr" value="Install extension"/>
+      <field name="enabled" value="true"/>
+    </row>
+    <row>
+      <field name="id" value="140"/>
+      <field name="name" value="extension_uninstall"/>
+      <field name="descr" value="Uninstall extension"/>
+      <field name="enabled" value="true"/>
+    </row>
+    <row>
+      <field name="id" value="141"/>
+      <field name="name" value="extension_upgrade"/>
+      <field name="descr" value="Upgrade extension"/>
+      <field name="enabled" value="true"/>
+    </row>
+    <row>
+      <field name="id" value="142"/>
+      <field name="name" value="extension_status_update"/>
+      <field name="descr" value="Update extension status"/>
+      <field name="enabled" value="true"/>
+    </row>
+    <row>
+      <field name="id" value="143"/>
+      <field name="name" value="additional_license_expired"/>
+      <field name="descr" value="Additional license key expired"/>
+      <field name="enabled" value="true"/>
+    </row>
   </table>
   <table name="admin_aliases">
     <description>Additional admins</description>
@@ -866,7 +896,7 @@
     <column name="update_release" type="varchar(30)" null="YES"/>
     <column name="update_vendor" type="varchar(255)" null="YES"/>
     <column name="update_packager" type="varchar(255)" null="YES"/>
-    <column name="received" type="datetime" null="YES" default="0000-00-00 00:00:00"/>
+    <column name="received" type="datetime" default="1970-01-01 00:00:00" null="YES"/>
     <column name="update_type" type="enum('patch','upgrade')" default="patch"/>
     <column name="recommended" type="enum('false','true')" default="false"/>
     <index table="APSCatalogUpdates" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
@@ -998,7 +1028,7 @@
     <description>Daily antivirus statistics</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
     <column name="type" type="enum('summary','viruses','recipients','spam_summary','spam_recipients')" default="summary"/>
-    <column name="date" type="date" default="0000-00-00"/>
+    <column name="date" type="date" default="1970-01-01"/>
     <column name="name" type="varchar(255)"/>
     <column name="val" type="bigint(20) unsigned" default="0"/>
     <index table="avstatistics" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
@@ -1054,7 +1084,7 @@
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
     <column name="obj_id" type="int(10) unsigned" default="0"/>
     <column name="obj_type" type="enum('domain')" default="domain"/>
-    <column name="last_backup" type="datetime" default="0000-00-00 00:00:00"/>
+    <column name="last_backup" type="datetime" default="1970-01-01 00:00:00"/>
     <column name="backup_period" type="int(10) unsigned" default="0"/>
     <column name="active" type="enum('true','false')" default="true"/>
     <column name="processed" type="enum('true','false')" default="true"/>
@@ -1110,7 +1140,7 @@
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
     <column name="util" type="varchar(255)"/>
     <column name="command" type="varchar(255)"/>
-    <column name="lastExecutionDateTime" type="datetime" default="0000-00-00 00:00:00"/>
+    <column name="lastExecutionDateTime" type="datetime" default="1970-01-01 00:00:00"/>
     <column name="count" type="bigint(20) unsigned" default="1"/>
     <index table="CliCallsStat" key_name="PRIMARY" column_name="id" non_unique="0" Collation="A"/>
     <index table="CliCallsStat" key_name="utilCommand" column_name="command" non_unique="0" Collation="A"/>
@@ -1178,7 +1208,7 @@
   <table name="ClientsTraffic">
     <description>Daily traffic statistics for clients</description>
     <column name="cl_id" type="int(10) unsigned" default="0" foreign_key="clients.id" delete_cascade="YES"/>
-    <column name="date" type="date" default="0000-00-00"/>
+    <column name="date" type="date" default="1970-01-01"/>
     <column name="http_in" type="bigint(20) unsigned" default="0"/>
     <column name="http_out" type="bigint(20) unsigned" default="0"/>
     <column name="ftp_in" type="bigint(20) unsigned" default="0"/>
@@ -1368,7 +1398,7 @@
     <column name="storage_type" type="enum('local','network')" default="local"/>
     <column name="network_login" type="varchar(255)" null="YES"/>
     <column name="network_password" type="varchar(255)" null="YES"/>
-    <column name="last_backup" type="datetime" default="0000-00-00 00:00:00"/>
+    <column name="last_backup" type="datetime" default="1970-01-01 00:00:00"/>
     <column name="incremental" type="enum('false','true')" default="true"/>
     <column name="compress_level" type="int(10) unsigned"/>
     <column name="email" type="varchar(255)"/>
@@ -1392,8 +1422,8 @@
     <column name="type" type="enum('NS','A','AAAA','CNAME','MX','PTR','TXT','SRV','DS','master','none')" default="A" platform="LINUX"/>
     <column name="host" type="varchar(255)"/>
     <column name="displayHost" type="varchar(255)"/>
-    <column name="val" type="varchar(255)"/>
-    <column name="displayVal" type="varchar(255)"/>
+    <column name="val" type="varchar(512)"/>
+    <column name="displayVal" type="varchar(512)"/>
     <column name="opt" type="varchar(255)" platform="WIN"/>
     <column name="opt" type="varchar(255)" platform="LINUX" default=""/>
     <column name="external_id" type="varchar(255)" null="YES"/>
@@ -1760,7 +1790,7 @@
   <table name="DomainsTraffic">
     <description>Daily traffic statistics for domains</description>
     <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id" delete_cascade="YES"/>
-    <column name="date" type="date" default="0000-00-00"/>
+    <column name="date" type="date" default="1970-01-01"/>
     <column name="http_in" type="bigint(20) unsigned" default="0"/>
     <column name="http_out" type="bigint(20) unsigned" default="0"/>
     <column name="ftp_in" type="bigint(20) unsigned" default="0"/>
@@ -1839,7 +1869,7 @@
     <column name="Session" type="varchar(8)" default="0"/>
     <column name="FilterName" type="varchar(50)" default="0"/>
     <column name="GroupOperation" type="int(10)" default="0"/>
-    <column name="LastExecutionDate" type="datetime" default="0000-00-00 00:00:00"/>
+    <column name="LastExecutionDate" type="datetime" default="1970-01-01 00:00:00"/>
     <column name="Count" type="int(10) unsigned" default="0"/>
     <index table="ApiRpcCallsStat" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="ApiRpcCallsStat" non_unique="0" key_name="LogItem" column_name="Version" Collation="A"/>
@@ -2337,7 +2367,7 @@
   </table>
   <table name="MailMessagesStat">
     <description>Statistics of sent messages (collected on Windows only)</description>
-    <column name="date" type="date" default="0000-00-00"/>
+    <column name="date" type="date" default="1970-01-01"/>
     <column name="sent" type="bigint(20) unsigned" default="0"/>
     <index table="MailMessagesStat" non_unique="0" key_name="PRIMARY" column_name="date" Collation="A"/>
   </table>
@@ -2638,7 +2668,7 @@
     <description>Packages update notifications</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
     <column name="serviceNodeId" type="int(10) unsigned" foreign_key="ServiceNodes.id" delete_cascade="YES"/>
-    <column name="eventDate" type="datetime" default="0000-00-00 00:00:00"/>
+    <column name="eventDate" type="datetime" default="1970-01-01 00:00:00"/>
     <column name="notificationSent" type="int(1)" default="0"/>
     <column name="data" type="mediumtext" null="YES"/>
     <index table="PackageUpdateNotifications" key_name="PRIMARY" column_name="id" non_unique="0" Collation="A"/>
@@ -2746,7 +2776,7 @@
     <description>Schema versions storage</description>
     <column name="version" type="varchar(14)"/>
     <row>
-      <field name="version" value="20160801055235"/>
+      <field name="version" value="20161226095648"/>
     </row>
   </table>
   <table name="Subscriptions">
@@ -2831,7 +2861,7 @@
   </table>
   <table name="PleskPagesStat">
     <description>Stats of Plesk pages visits</description>
-    <column name="date" type="date" default="0000-00-00"/>
+    <column name="date" type="date" default="1970-01-01"/>
     <column name="url" type="varchar(255)"/>
     <column name="hits" type="bigint(20) unsigned" default="0"/>
     <index table="PleskPagesStat" non_unique="0" key_name="PRIMARY" column_name="date" Collation="A"/>
@@ -3678,7 +3708,7 @@
   </table>
   <table name="SitePagesStat">
     <description>Stats of pages visits</description>
-    <column name="date" type="date" default="0000-00-00"/>
+    <column name="date" type="date" default="1970-01-01"/>
     <column name="hits" type="bigint(20) unsigned" default="0"/>
     <index table="SitePagesStat" non_unique="0" key_name="PRIMARY" column_name="date" Collation="A"/>
   </table>
@@ -3752,7 +3782,7 @@
   <table name="stat">
     <description>[Unnecessary?]</description>
     <column name="dom_id" type="int(10) unsigned" default="0"/>
-    <column name="date" type="date" default="0000-00-00"/>
+    <column name="date" type="date" default="1970-01-01"/>
     <column name="transfer" type="bigint(20) unsigned" null="YES"/>
     <index table="stat" non_unique="0" key_name="PRIMARY" column_name="dom_id" Collation="A"/>
     <index table="stat" non_unique="0" key_name="PRIMARY" column_name="date" Collation="A"/>
@@ -3868,15 +3898,14 @@
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
     <column name="domainId" type="int(10) unsigned" foreign_key="domains.id" delete_cascade="YES"/>
     <column name="statusCodes" type="varchar(255)"/>
-    <column name="stopDate" type="datetime" default="0000-00-00 00:00:00"/>
+    <column name="stopDate" type="datetime" default="1970-01-01 00:00:00"/>
     <column name="isEnabled" type="int(1)" default="0"/>
     <index table="TraceFailedRequestsRules" key_name="PRIMARY" column_name="id" non_unique="0" Collation="A"/>
     <index table="TraceFailedRequestsRules" key_name="isEnabled" column_name="isEnabled" non_unique="1" Collation="A"/>
   </table>
   <table name="upgrade_history">
     <description>Plesk upgrade history</description>
-    <column name="upgrade_date" type="datetime" null="YES" platform="WIN"/>
-    <column name="upgrade_date" type="datetime" default="0000-00-00 00:00:00" platform="LINUX"/>
+    <column name="upgrade_date" type="datetime" default="1970-01-01 00:00:00"/>
     <column name="version_info" type="varchar(50)" null="YES"/>
     <column name="db_version" type="varchar(50)" null="YES"/>
     <column name="os" type="varchar(255)" null="YES"/>
