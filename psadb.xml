@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Copyright 1999-2017. Parallels IP Holdings GmbH. All Rights Reserved. -->
+<!-- Copyright 1999-2017. Plesk International GmbH. All rights reserved. -->
 <pleskdb version="8.2">
   <table name="accounts">
     <description>Storage of passwords for different types of accounts</description>
@@ -10,852 +10,9 @@
   </table>
   <table name="actions">
     <description>List of logable actions: name (for php), descr (human-readable)</description>
-    <column name="id" type="int(10) unsigned" extra="auto_increment"/>
     <column name="name" type="varchar(255)"/>
-    <column name="descr" type="varchar(255)"/>
     <column name="enabled" type="enum('false','true')" default="true"/>
-    <index table="actions" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
-    <index table="actions" non_unique="0" key_name="name" column_name="name" Collation="A"/>
-    <row>
-      <field name="id" value="1"/>
-      <field name="name" value="admin_update"/>
-      <field name="descr" value="Update Administrator Information"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="2"/>
-      <field name="name" value="service_stop"/>
-      <field name="descr" value="Stop Service"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="3"/>
-      <field name="name" value="service_start"/>
-      <field name="descr" value="Start Service"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="4"/>
-      <field name="name" value="service_restart"/>
-      <field name="descr" value="Restart Service"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="5"/>
-      <field name="name" value="ip_address_create"/>
-      <field name="descr" value="Create IP Address"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="6"/>
-      <field name="name" value="ip_address_update"/>
-      <field name="descr" value="Update IP Address"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="7"/>
-      <field name="name" value="ip_address_delete"/>
-      <field name="descr" value="Delete IP Address"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="8"/>
-      <field name="name" value="client_create"/>
-      <field name="descr" value="Create Client"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="9"/>
-      <field name="name" value="client_update"/>
-      <field name="descr" value="Update Client"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="10"/>
-      <field name="name" value="client_delete"/>
-      <field name="descr" value="Delete Client"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="11"/>
-      <field name="name" value="client_status_update"/>
-      <field name="descr" value="Update Client Status"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="12"/>
-      <field name="name" value="client_preferences_update"/>
-      <field name="descr" value="Update Client Preferences"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="13"/>
-      <field name="name" value="client_ip_pool_update"/>
-      <field name="descr" value="Update Client IP Pool"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="14"/>
-      <field name="name" value="client_limit_size_reached"/>
-      <field name="descr" value="Client's disk space limit reached"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="15"/>
-      <field name="name" value="client_limit_traffic_reached"/>
-      <field name="descr" value="Client's traffic limit reached"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="16"/>
-      <field name="name" value="domain_create"/>
-      <field name="descr" value="Create Domain"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="17"/>
-      <field name="name" value="domain_update"/>
-      <field name="descr" value="Update Domain"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="18"/>
-      <field name="name" value="domain_delete"/>
-      <field name="descr" value="Delete Domain"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="19"/>
-      <field name="name" value="domain_status_update"/>
-      <field name="descr" value="Update Domain Status"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="20"/>
-      <field name="name" value="domain_dns_update"/>
-      <field name="descr" value="Update Domain DNS Zone"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="21"/>
-      <field name="name" value="domain_limit_size_reached"/>
-      <field name="descr" value="Domain's disk space limit reached"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="22"/>
-      <field name="name" value="domain_limit_traffic_reached"/>
-      <field name="descr" value="Domain's traffic limit reached"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="23"/>
-      <field name="name" value="subdomain_create"/>
-      <field name="descr" value="Create Subdomain"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="24"/>
-      <field name="name" value="subdomain_update"/>
-      <field name="descr" value="Update Subdomain"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="25"/>
-      <field name="name" value="subdomain_delete"/>
-      <field name="descr" value="Delete Subdomain"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="26"/>
-      <field name="name" value="phys_hosting_create"/>
-      <field name="descr" value="Create Physical Hosting"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="27"/>
-      <field name="name" value="phys_hosting_update"/>
-      <field name="descr" value="Update Physical Hosting"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="28"/>
-      <field name="name" value="phys_hosting_delete"/>
-      <field name="descr" value="Delete Physical Hosting"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="29"/>
-      <field name="name" value="forwarding_create"/>
-      <field name="descr" value="Create Standard/Frame forwarding"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="30"/>
-      <field name="name" value="forwarding_update"/>
-      <field name="descr" value="Update Standard/Frame forwarding"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="31"/>
-      <field name="name" value="forwarding_delete"/>
-      <field name="descr" value="Delete Standard/Frame forwarding"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="32"/>
-      <field name="name" value="mailname_create"/>
-      <field name="descr" value="Create Mailname"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="33"/>
-      <field name="name" value="mailname_update"/>
-      <field name="descr" value="Update Mailname"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="34"/>
-      <field name="name" value="mailname_delete"/>
-      <field name="descr" value="Delete Mailname"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="35"/>
-      <field name="name" value="webuser_create"/>
-      <field name="descr" value="Create WebUser"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="36"/>
-      <field name="name" value="webuser_update"/>
-      <field name="descr" value="Update WebUser"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="37"/>
-      <field name="name" value="webuser_delete"/>
-      <field name="descr" value="Delete WebUser"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="38"/>
-      <field name="name" value="client_limits_update"/>
-      <field name="descr" value="Update Client Limits"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="39"/>
-      <field name="name" value="domain_limits_update"/>
-      <field name="descr" value="Update Domain Limits"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="40"/>
-      <field name="name" value="client_permissions_update"/>
-      <field name="descr" value="Update Client Permissions"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="41"/>
-      <field name="name" value="maillist_create"/>
-      <field name="descr" value="Create Mail list"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="42"/>
-      <field name="name" value="maillist_update"/>
-      <field name="descr" value="Update Mail list"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="43"/>
-      <field name="name" value="maillist_delete"/>
-      <field name="descr" value="Delete Mail list"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="44"/>
-      <field name="name" value="cp_user_login"/>
-      <field name="descr" value="CP User Login"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="45"/>
-      <field name="name" value="cp_user_logout"/>
-      <field name="descr" value="CP User Logout"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="46"/>
-      <field name="name" value="dl_user_update"/>
-      <field name="descr" value="Domain User Update"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="47"/>
-      <field name="name" value="siteapp_install"/>
-      <field name="descr" value="Install Site Application"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="48"/>
-      <field name="name" value="siteapp_reconfigure"/>
-      <field name="descr" value="Reconfigure Site Application"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="49"/>
-      <field name="name" value="siteapp_unchain"/>
-      <field name="descr" value="Unchain site application"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="50"/>
-      <field name="name" value="siteapp_uninstall"/>
-      <field name="descr" value="Uninstall site application"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="51"/>
-      <field name="name" value="license_update"/>
-      <field name="descr" value="License updated"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="54"/>
-      <field name="name" value="client_siteapp_added"/>
-      <field name="descr" value="Site Application Package added to Client Pool"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="55"/>
-      <field name="name" value="client_siteapp_removed"/>
-      <field name="descr" value="Site Application Package removed from Client Pool"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="56"/>
-      <field name="name" value="domain_alias_create"/>
-      <field name="descr" value="Create domain alias"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="57"/>
-      <field name="name" value="domain_alias_update"/>
-      <field name="descr" value="Update domain alias"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="58"/>
-      <field name="name" value="domain_alias_delete"/>
-      <field name="descr" value="Delete domain alias"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="59"/>
-      <field name="name" value="database_server_create"/>
-      <field name="descr" value="Create database server"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="60"/>
-      <field name="name" value="database_server_update"/>
-      <field name="descr" value="Update database server"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="61"/>
-      <field name="name" value="database_server_delete"/>
-      <field name="descr" value="Delete database server"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="62"/>
-      <field name="name" value="remote_dns_status_update"/>
-      <field name="descr" value="Update remote DNS server status"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="63"/>
-      <field name="name" value="admin_alias_create"/>
-      <field name="descr" value="Create administrator subaccount"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="64"/>
-      <field name="name" value="admin_alias_update"/>
-      <field name="descr" value="Update administrator subaccount"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="65"/>
-      <field name="name" value="admin_alias_delete"/>
-      <field name="descr" value="Delete administrator subaccount"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="66"/>
-      <field name="name" value="ftpuser_create"/>
-      <field name="descr" value="Create FTP User"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="67"/>
-      <field name="name" value="ftpuser_update"/>
-      <field name="descr" value="Update FTP User"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="68"/>
-      <field name="name" value="ftpuser_delete"/>
-      <field name="descr" value="Delete FTP User"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="69"/>
-      <field name="name" value="siteapp_upgrade"/>
-      <field name="descr" value="Upgrade site application"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="70"/>
-      <field name="name" value="plesk_component_upgrade"/>
-      <field name="descr" value="Plesk component upgrade"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="71"/>
-      <field name="name" value="license_expired"/>
-      <field name="descr" value="License expired"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="72"/>
-      <field name="name" value="session_preferences_update"/>
-      <field name="descr" value="Login settings updated"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="73"/>
-      <field name="name" value="dashboard_preset_create"/>
-      <field name="descr" value="Create Desktop Preset"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="74"/>
-      <field name="name" value="dashboard_preset_update"/>
-      <field name="descr" value="Update Desktop Preset"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="75"/>
-      <field name="name" value="dashboard_preset_delete"/>
-      <field name="descr" value="Delete Desktop Preset"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="76"/>
-      <field name="name" value="domain_alias_dns_update"/>
-      <field name="descr" value="Update Domain alias DNS Zone"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="77"/>
-      <field name="name" value="database_create"/>
-      <field name="descr" value="Create Database"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="78"/>
-      <field name="name" value="database_delete"/>
-      <field name="descr" value="Delete Database"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="79"/>
-      <field name="name" value="database_user_create"/>
-      <field name="descr" value="Create Database User"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="80"/>
-      <field name="name" value="database_user_update"/>
-      <field name="descr" value="Update Database User"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="81"/>
-      <field name="name" value="database_user_delete"/>
-      <field name="descr" value="Delete Database User"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="82"/>
-      <field name="name" value="client_guid_update"/>
-      <field name="descr" value="Update Client GUID"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="83"/>
-      <field name="name" value="domain_guid_update"/>
-      <field name="descr" value="Update Domain GUID"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="84"/>
-      <field name="name" value="template_client_create"/>
-      <field name="descr" value="Create client template"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="85"/>
-      <field name="name" value="template_client_update"/>
-      <field name="descr" value="Update client template"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="86"/>
-      <field name="name" value="template_client_delete"/>
-      <field name="descr" value="Delete client template"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="87"/>
-      <field name="name" value="template_admin_create"/>
-      <field name="descr" value="Create domain template by admin"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="88"/>
-      <field name="name" value="template_admin_update"/>
-      <field name="descr" value="Update domain template by admin"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="89"/>
-      <field name="name" value="template_admin_delete"/>
-      <field name="descr" value="Delete domain template by admin"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="90"/>
-      <field name="name" value="template_domain_create"/>
-      <field name="descr" value="Create domain template by client"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="91"/>
-      <field name="name" value="template_domain_update"/>
-      <field name="descr" value="Update domain template by client"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="92"/>
-      <field name="name" value="template_domain_delete"/>
-      <field name="descr" value="Delete domain template by client"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="94"/>
-      <field name="name" value="domain_owner_change"/>
-      <field name="descr" value="Change Domain Owner"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="95"/>
-      <field name="name" value="template_reseller_create"/>
-      <field name="descr" value="Create client template"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="96"/>
-      <field name="name" value="template_reseller_update"/>
-      <field name="descr" value="Update client template"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="97"/>
-      <field name="name" value="template_reseller_delete"/>
-      <field name="descr" value="Delete reseller template"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="98"/>
-      <field name="name" value="reseller_create"/>
-      <field name="descr" value="Create Reseller"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="99"/>
-      <field name="name" value="reseller_update"/>
-      <field name="descr" value="Update Reseller"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="100"/>
-      <field name="name" value="reseller_delete"/>
-      <field name="descr" value="Delete Reseller"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="101"/>
-      <field name="name" value="reseller_status_update"/>
-      <field name="descr" value="Update Reseller Status"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="102"/>
-      <field name="name" value="reseller_preferences_update"/>
-      <field name="descr" value="Update Reseller Preferences"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="103"/>
-      <field name="name" value="reseller_ip_pool_update"/>
-      <field name="descr" value="Update Reseller IP Pool"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="104"/>
-      <field name="name" value="reseller_limit_size_reached"/>
-      <field name="descr" value="Reseller's disk space limit reached"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="105"/>
-      <field name="name" value="reseller_limit_traffic_reached"/>
-      <field name="descr" value="Reseller's traffic limit reached"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="106"/>
-      <field name="name" value="reseller_limits_update"/>
-      <field name="descr" value="Update Reseller Limits"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="107"/>
-      <field name="name" value="reseller_permissions_update"/>
-      <field name="descr" value="Update Reseller Permissions"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="108"/>
-      <field name="name" value="reseller_siteapp_added"/>
-      <field name="descr" value="Site Application Package added to Reseller Pool"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="109"/>
-      <field name="name" value="reseller_siteapp_removed"/>
-      <field name="descr" value="Site Application Package removed from Reseller Pool"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="110"/>
-      <field name="name" value="reseller_guid_update"/>
-      <field name="descr" value="Update Reseller GUID"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="111"/>
-      <field name="name" value="health_status_change"/>
-      <field name="descr" value="Server health status changed"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="112"/>
-      <field name="name" value="site_create"/>
-      <field name="descr" value="Create additional domain"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="113"/>
-      <field name="name" value="site_update"/>
-      <field name="descr" value="Update additional domain"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="114"/>
-      <field name="name" value="site_delete"/>
-      <field name="descr" value="Delete additional domain"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="115"/>
-      <field name="name" value="site_status_update"/>
-      <field name="descr" value="Change status of additional domain"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="116"/>
-      <field name="name" value="site_dns_update"/>
-      <field name="descr" value="Update additional domain DNS zone status"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="117"/>
-      <field name="name" value="site_guid_update"/>
-      <field name="descr" value="Change site guid"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="118"/>
-      <field name="name" value="site_alias_create"/>
-      <field name="descr" value="Create alias for additional domain"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="119"/>
-      <field name="name" value="site_alias_update"/>
-      <field name="descr" value="Update alias for additional domain"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="120"/>
-      <field name="name" value="site_alias_delete"/>
-      <field name="descr" value="Delete alias for additional domain"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="121"/>
-      <field name="name" value="site_alias_dns_update"/>
-      <field name="descr" value="Update DNS zone for alias for additional domain"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="122"/>
-      <field name="name" value="site_subdomain_create"/>
-      <field name="descr" value="Create subdomain for additional domain"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="123"/>
-      <field name="name" value="site_subdomain_update"/>
-      <field name="descr" value="Update subdomain for additional domain"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="124"/>
-      <field name="name" value="site_subdomain_delete"/>
-      <field name="descr" value="Delete subdomain for additional domain"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="125"/>
-      <field name="name" value="subdomain_dns_update"/>
-      <field name="descr" value="Update subdomain DNS zone status"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="126"/>
-      <field name="name" value="site_subdomain_dns_update"/>
-      <field name="descr" value="Update DNS zone of subdomain for additional domain status"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="127"/>
-      <field name="name" value="patch_available"/>
-      <field name="descr" value="New patch available"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="128"/>
-      <field name="name" value="patch_installed"/>
-      <field name="descr" value="New patch installed"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="129"/>
-      <field name="name" value="cp_user_login_failed"/>
-      <field name="descr" value="CP User Login Attempt Failed"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="130"/>
-      <field name="name" value="cp_user_api_login_failed"/>
-      <field name="descr" value="CP User Login Attempt via API Failed"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row platform="WIN">
-      <field name="id" value="131"/>
-      <field name="name" value="domain_limit_mysql_quota_reached"/>
-      <field name="descr" value="MySQL database quota reached"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row platform="WIN">
-      <field name="id" value="132"/>
-      <field name="name" value="domain_limit_mysql_soft_quota_reached"/>
-      <field name="descr" value="MySQL database soft quota reached"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row platform="WIN">
-      <field name="id" value="133"/>
-      <field name="name" value="domain_limit_mssql_quota_reached"/>
-      <field name="descr" value="MSSQL database quota reached"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row platform="WIN">
-      <field name="id" value="134"/>
-      <field name="name" value="domain_limit_mssql_soft_quota_reached"/>
-      <field name="descr" value="MSSQL database soft quota reached"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="135"/>
-      <field name="name" value="domain_plan_change"/>
-      <field name="descr" value="Subscription plan change"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="136"/>
-      <field name="name" value="admin_preferences_update"/>
-      <field name="descr" value="Administrator preferences updated"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="137"/>
-      <field name="name" value="domain_usage_size_update"/>
-      <field name="descr" value="Subscription's disk space usage updated"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="138"/>
-      <field name="name" value="domain_usage_traffic_update"/>
-      <field name="descr" value="Subscription's traffic usage updated"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="139"/>
-      <field name="name" value="extension_install"/>
-      <field name="descr" value="Install extension"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="140"/>
-      <field name="name" value="extension_uninstall"/>
-      <field name="descr" value="Uninstall extension"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="141"/>
-      <field name="name" value="extension_upgrade"/>
-      <field name="descr" value="Upgrade extension"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="142"/>
-      <field name="name" value="extension_status_update"/>
-      <field name="descr" value="Update extension status"/>
-      <field name="enabled" value="true"/>
-    </row>
-    <row>
-      <field name="id" value="143"/>
-      <field name="name" value="additional_license_expired"/>
-      <field name="descr" value="Additional license key expired"/>
-      <field name="enabled" value="true"/>
-    </row>
+    <index table="actions" key_name="PRIMARY" column_name="name" non_unique="0" Collation="A"/>
   </table>
   <table name="admin_aliases">
     <description>Additional admins</description>
@@ -1049,7 +206,7 @@
     <!-- depends on obj_type -->
     <column name="obj_id" type="int(10) unsigned" default="0"/>
     <column name="obj_type" type="enum('server','reseller','client','domain')"/>
-    <column name="repository" type="enum('local','ftp')" default="local"/>
+    <column name="repository" type="enum('local','ftp','ext','local-and-ext')" default="local"/>
     <column name="last" type="datetime" null="YES"/>
     <column name="period" type="int(10) unsigned" default="0"/>
     <column name="active" type="enum('false','true')"/>
@@ -1067,6 +224,7 @@
     <column name="mssql_native_backup" type="int(1)" default="1"/>
     <column name="backupExcludeFilesId" type="int(10) unsigned" null="YES" foreign_key="BackupExcludeFiles.id" delete_cascade="YES"/>
     <column name="backupExcludeLogs" type="int(1)" default="0"/>
+    <column name="remoteStorage" type="varchar(255)" null="YES"/>
     <index table="BackupsScheduled" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
   </table>
   <table name="BackupsSettings">
@@ -1131,7 +289,7 @@
     <description>Clients key-value params</description>
     <column name="cl_id" type="int(10) unsigned" default="0" foreign_key="clients.id" delete_cascade="YES"/>
     <column name="param" type="varchar(245)"/>
-    <column name="val" type="varchar(255)" null="YES"/>
+    <column name="val" type="varchar(5000)" null="YES"/>
     <index table="cl_param" non_unique="0" key_name="PRIMARY" column_name="cl_id" Collation="A"/>
     <index table="cl_param" non_unique="0" key_name="PRIMARY" column_name="param" Collation="A"/>
   </table>
@@ -1380,7 +538,6 @@
     <column name="mysql_dbases" type="bigint(20) unsigned" default="0"/>
     <column name="mssql_dbases" type="bigint(20) unsigned" default="0"/>
     <column name="mailboxes" type="bigint(20) unsigned" null="YES" default="0"/>
-    <column name="webapps" type="bigint(20) unsigned" null="YES" default="0"/>
     <column name="maillists" type="bigint(20) unsigned" null="YES" default="0"/>
     <column name="domaindumps" type="bigint(20) unsigned" null="YES" default="0"/>
     <column name="www_root" type="bigint(20) unsigned" null="YES" default="0"/>
@@ -1418,8 +575,7 @@
     <description>DNS resource records</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
     <column name="dns_zone_id" type="int(10) unsigned" null="YES" foreign_key="dns_zone.id" delete_cascade="YES"/>
-    <column name="type" type="enum('NS','A','AAAA','CNAME','MX','PTR','TXT','AXFR','SRV','DS','master','none')" default="A" platform="WIN"/>
-    <column name="type" type="enum('NS','A','AAAA','CNAME','MX','PTR','TXT','SRV','DS','master','none')" default="A" platform="LINUX"/>
+    <column name="type" type="enum('NS','A','AAAA','CNAME','MX','PTR','TXT','AXFR','SRV','DS','CAA','master','none')" default="A"/>
     <column name="host" type="varchar(255)"/>
     <column name="displayHost" type="varchar(255)"/>
     <column name="val" type="varchar(512)"/>
@@ -1436,12 +592,11 @@
   <table name="dns_recs_t">
     <description>DNS resource records templates</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="type" type="enum('NS','A','AAAA','CNAME','MX','PTR','SOA','TXT','AXFR','SRV','none')" default="A" platform="WIN"/>
-    <column name="type" type="enum('NS','A','AAAA','CNAME','MX','PTR','TXT','SRV')" default="A" platform="LINUX"/>
+    <column name="type" type="enum('NS','A','AAAA','CNAME','MX','PTR','SOA','TXT','AXFR','SRV','CAA','none')" default="A"/>
     <column name="host" type="varchar(255)"/>
     <column name="displayHost" type="varchar(255)"/>
-    <column name="val" type="varchar(255)"/>
-    <column name="displayVal" type="varchar(255)"/>
+    <column name="val" type="varchar(512)"/>
+    <column name="displayVal" type="varchar(512)"/>
     <column name="opt" type="varchar(255)" platform="WIN"/>
     <column name="opt" type="varchar(255)" platform="LINUX" default=""/>
     <column name="time_stamp" type="timestamp" null="YES" default="CURRENT_TIMESTAMP"/>
@@ -1687,7 +842,7 @@
     <description>Domain key-value params</description>
     <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id" delete_cascade="YES"/>
     <column name="param" type="varchar(245)"/>
-    <column name="val" type="varchar(255)" null="YES"/>
+    <column name="val" type="varchar(5000)" null="YES"/>
     <index table="dom_param" non_unique="0" key_name="PRIMARY" column_name="dom_id" Collation="A"/>
     <index table="dom_param" non_unique="0" key_name="PRIMARY" column_name="param" Collation="A"/>
   </table>
@@ -1826,16 +981,27 @@
     <column name="requestInterval" type="int(10) unsigned" default="200"/>
     <index table="DynamicIpSecurity" non_unique="0" key_name="PRIMARY" column_name="dom_id" Collation="A"/>
   </table>
+  <table name="EmailActivations">
+    <description>E-mail activation keys</description>
+    <column name="id" type="int(10) unsigned" extra="auto_increment"/>
+    <column name="hash" type="varchar(255)"/>
+    <column name="created" type="datetime" default="1970-01-01 00:00:00"/>
+    <column name="clientId" type="int(11) unsigned" default="0"/>
+    <column name="smbUserId" type="int(11) unsigned" default="0"/>
+    <column name="adminAliasId" type="int(11) unsigned" default="0"/>
+    <index table="EmailActivations" key_name="PRIMARY" column_name="id" non_unique="0" Collation="A"/>
+    <index table="EmailActivations" key_name="hash" column_name="hash" non_unique="1" Collation="A"/>
+  </table>
   <table name="event_handlers">
     <description>Registered event handlers</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="action_id" type="int(10) unsigned" default="0" foreign_key="actions.id" delete_cascade="YES"/>
     <column name="priority" type="int(10) unsigned" default="0"/>
     <column name="user" type="varchar(255)" null="YES" default="Plesk Administrator" platform="WIN"/>
     <column name="user" type="varchar(255)" default="nobody" platform="LINUX"/>
     <column name="command" type="text" null="YES"/>
+    <column name="action_name" type="varchar(255)"/>
     <index table="event_handlers" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
-    <index table="event_handlers" non_unique="1" key_name="action_id" column_name="action_id" Collation="A"/>
+    <index table="event_handlers" key_name="action_name" column_name="action_name" non_unique="1" Collation="A"/>
   </table>
   <table name="exp_event">
     <description>Action log for API-RPC</description>
@@ -2202,10 +1368,10 @@
     <column name="date" type="datetime" null="YES"/>
     <column name="ip_address" type="varchar(39)"/>
     <column name="user" type="varchar(255)"/>
-    <column name="action_id" type="int(10) unsigned" default="0" foreign_key="actions.id" delete_cascade="YES"/>
     <column name="object_id" type="int(10) unsigned" default="0"/>
+    <column name="action_name" type="varchar(255)"/>
     <index table="log_actions" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
-    <index table="log_actions" non_unique="1" key_name="action_id" column_name="action_id" Collation="A"/>
+    <index table="log_actions" key_name="action_name" column_name="action_name" non_unique="1" Collation="A"/>
   </table>
   <table name="log_components">
     <description>Logged action components</description>
@@ -2518,14 +1684,6 @@
       <field name="val" value="true"/>
     </row>
     <row>
-      <field name="param" value="include_webapps"/>
-      <field name="val" value="true"/>
-    </row>
-    <row platform="WIN">
-      <field name="param" value="lines_per_page"/>
-      <field name="val" value="20"/>
-    </row>
-    <row>
       <field name="param" value="login_timeout"/>
       <field name="val" value="30"/>
     </row>
@@ -2622,6 +1780,7 @@
     <column name="icon" type="varchar(255)"/>
     <column name="plesk_max_version" type="varchar(30)" null="YES"/>
     <column name="status" type="enum('true','false')" default="true"/>
+    <column name="hidden" type="int(1)" default="0"/>
     <index table="Modules" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="Modules" non_unique="0" key_name="name" column_name="name" Collation="A"/>
   </table>
@@ -2629,7 +1788,7 @@
     <description>Extensions key-value params</description>
     <column name="module_id" type="int(10) unsigned" default="0" foreign_key="Modules.id" delete_cascade="YES"/>
     <column name="name" type="varchar(255)"/>
-    <column name="value" type="varchar(2000)"/>
+    <column name="value" type="varchar(5000)" null="YES"/>
     <index table="ModuleSettings" non_unique="0" key_name="PRIMARY" column_name="module_id" Collation="A"/>
     <index table="ModuleSettings" non_unique="0" key_name="PRIMARY" column_name="name" Collation="A"/>
   </table>
@@ -2776,7 +1935,7 @@
     <description>Schema versions storage</description>
     <column name="version" type="varchar(14)"/>
     <row>
-      <field name="version" value="20161226095648"/>
+      <field name="version" value="20171208010000"/>
     </row>
   </table>
   <table name="Subscriptions">
@@ -3371,7 +2530,7 @@
     <column name="flt_enabled" type="enum('user','serv','both','')" default="both"/>
     <column name="rw_subject_tag" type="varchar(255)" default="*****SPAM*****"/>
     <column name="hits_required" type="varchar(255)" default="7"/>
-    <column name="spam_action" type="enum('delete','save')" default="save"/>
+    <column name="spam_action" type="enum('delete','save','move')" default="save"/>
     <index table="sa_conf" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
   </table>
   <table name="sa_list" platform="WIN">
@@ -3575,109 +2734,6 @@
       <field name="description" value="Local"/>
     </row>
   </table>
-  <table name="ServiceInstallations">
-    <description>Services available on service nodes</description>
-    <column name="id" type="int(11) unsigned" extra="auto_increment"/>
-    <column name="name" type="varchar(255)"/>
-    <column name="status" type="int(11) unsigned" default="0"/>
-    <column name="serviceNodeId" type="int(11) unsigned" foreign_key="ServiceNodes.id" delete_cascade="YES"/>
-    <index table="ServiceInstallations" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
-    <index table="ServiceInstallations" non_unique="0" key_name="name" column_name="name" Collation="A"/>
-    <index table="ServiceInstallations" non_unique="0" key_name="name" column_name="serviceNodeId" Collation="A"/>
-    <row>
-      <field name="id" value="1"/>
-      <field name="name" value="PleskDns"/>
-      <field name="status" value="1"/>
-      <field name="serviceNodeId" value="1"/>
-    </row>
-    <row>
-      <field name="id" value="2"/>
-      <field name="name" value="PleskFileSystem"/>
-      <field name="status" value="1"/>
-      <field name="serviceNodeId" value="1"/>
-    </row>
-  </table>
-  <table name="ServiceInstallationProperties">
-    <description>Service key-value params</description>
-    <column name="serviceInstallationId" type="int(11) unsigned" foreign_key="ServiceInstallations.id" delete_cascade="YES"/>
-    <column name="name" type="varchar(255)"/>
-    <column name="value" type="text" null="YES"/>
-    <index table="ServiceInstallationProperties" non_unique="0" key_name="PRIMARY" column_name="serviceInstallationId" Collation="A"/>
-    <index table="ServiceInstallationProperties" non_unique="0" key_name="PRIMARY" column_name="name" Collation="A"/>
-  </table>
-  <table name="PlanServiceInstallations">
-    <description>Services assigned to service plan</description>
-    <column name="id" type="int(11) unsigned" extra="auto_increment"/>
-    <column name="planId" type="int(11) unsigned" foreign_key="Templates.id" delete_cascade="YES"/>
-    <column name="serviceInstallationId" type="int(11) unsigned" foreign_key="ServiceInstallations.id" delete_cascade="YES"/>
-    <column name="assigned" type="int(11) unsigned" default="1"/>
-    <index table="PlanServiceInstallations" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
-    <index table="PlanServiceInstallations" non_unique="0" key_name="PRIMARY" column_name="planId" Collation="A"/>
-    <index table="PlanServiceInstallations" non_unique="0" key_name="PRIMARY" column_name="serviceInstallationId" Collation="A"/>
-  </table>
-  <table name="PlanServiceProperties">
-    <description>Services assigned to service plan key-value params</description>
-    <column name="planServiceId" type="int(11) unsigned" foreign_key="PlanServiceInstallations.id" delete_cascade="YES"/>
-    <column name="name" type="varchar(255)"/>
-    <column name="value" type="text" null="YES"/>
-    <index table="PlanServiceProperties" non_unique="0" key_name="PRIMARY" column_name="planServiceId" Collation="A"/>
-    <index table="PlanServiceProperties" non_unique="0" key_name="PRIMARY" column_name="name" Collation="A"/>
-  </table>
-  <table name="ServiceInstanceProperties">
-    <description>Instances of services key-value properties</description>
-    <column name="serviceInstanceId" type="int(11) unsigned" foreign_key="ServiceInstances.id" delete_cascade="YES"/>
-    <column name="name" type="varchar(255)"/>
-    <column name="value" type="text" null="YES"/>
-    <index table="ServiceInstanceProperties" non_unique="0" key_name="PRIMARY" column_name="serviceInstanceId" Collation="A"/>
-    <index table="ServiceInstanceProperties" non_unique="0" key_name="PRIMARY" column_name="name" Collation="A"/>
-  </table>
-  <table name="ServiceInstanceResources">
-    <description>Resources of service instances</description>
-    <column name="serviceInstanceId" type="int(11) unsigned" foreign_key="ServiceInstances.id"/>
-    <column name="serviceResourceType" type="varchar(255)"/>
-    <column name="serviceResourceId" type="int(11) unsigned"/>
-    <column name="reference" type="varchar(255)"/>
-    <index table="ServiceInstanceResources" non_unique="0" key_name="PRIMARY" column_name="serviceInstanceId" Collation="A"/>
-    <index table="ServiceInstanceResources" non_unique="0" key_name="PRIMARY" column_name="serviceResourceType" Collation="A"/>
-    <index table="ServiceInstanceResources" non_unique="0" key_name="PRIMARY" column_name="serviceResourceId" Collation="A"/>
-    <index table="ServiceInstanceResources" non_unique="0" key_name="PRIMARY" column_name="reference" Collation="A"/>
-  </table>
-  <table name="ServiceLimits">
-    <description>Limits of installed service implementations</description>
-    <column name="limitName" type="varchar(255)"/>
-    <column name="serviceName" type="varchar(255)"/>
-    <index table="ServiceLimits" non_unique="0" key_name="PRIMARY" column_name="limitName" Collation="A"/>
-    <index table="ServiceLimits" non_unique="0" key_name="PRIMARY" column_name="serviceName" Collation="A"/>
-  </table>
-  <table name="ServicePermissions">
-    <description>Permissions of installed service implementations</description>
-    <column name="permissionName" type="varchar(255)"/>
-    <column name="serviceName" type="varchar(255)"/>
-    <index table="ServicePermissions" non_unique="0" key_name="PRIMARY" column_name="permissionName" Collation="A"/>
-    <index table="ServicePermissions" non_unique="0" key_name="PRIMARY" column_name="serviceName" Collation="A"/>
-  </table>
-  <table name="ServiceInstances">
-    <description>Instances of services</description>
-    <column name="id" type="int(11) unsigned" extra="auto_increment"/>
-    <column name="serviceInstallationId" type="int(11) unsigned" foreign_key="ServiceInstallations.id"/>
-    <column name="servicePackageId" type="int(11) unsigned" foreign_key="Subscriptions.id"/>
-    <column name="reference" type="varchar(255)" null="YES"/>
-    <column name="status" type="int(11) unsigned" default="1"/>
-    <column name="enabled" type="int(11) unsigned" default="1"/>
-    <index table="ServiceInstances" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
-    <index table="ServiceInstances" non_unique="0" key_name="reference" column_name="serviceInstallationId" Collation="A"/>
-    <index table="ServiceInstances" non_unique="0" key_name="reference" column_name="servicePackageId" Collation="A"/>
-    <index table="ServiceInstances" non_unique="0" key_name="reference" column_name="reference" Collation="A"/>
-  </table>
-  <table name="ServiceInstanceDepends">
-    <description>Dependencies between instances of services</description>
-    <column name="serviceInstanceId" type="int(11) unsigned" foreign_key="ServiceInstances.id" delete_cascade="YES"/>
-    <column name="requiredInstanceId" type="int(11) unsigned" foreign_key="ServiceInstances.id" delete_cascade="YES"/>
-    <column name="apiType" type="varchar(255)"/>
-    <index table="ServiceInstanceDepends" non_unique="0" key_name="PRIMARY" column_name="serviceInstanceId" Collation="A"/>
-    <index table="ServiceInstanceDepends" non_unique="0" key_name="PRIMARY" column_name="requiredInstanceId" Collation="A"/>
-    <index table="ServiceInstanceDepends" non_unique="0" key_name="PRIMARY" column_name="apiType" Collation="A"/>
-  </table>
   <table name="sessions">
     <description>User sessions</description>
     <column name="sess_id" type="varchar(33)"/>
@@ -3770,14 +2826,6 @@
       <field name="preference" value="rewrite_header"/>
       <field name="value" value="subject *****SPAM*****"/>
     </row>
-  </table>
-  <table name="SSOBranding">
-    <description>Branding for SSO</description>
-    <column name="idp_url" type="varchar(255)"/>
-    <column name="http_request_domain" type="varchar(255)"/>
-    <index table="SSOBranding" non_unique="0" key_name="PRIMARY" column_name="http_request_domain" Collation="A" platform="LINUX"/>
-    <index table="SSOBranding" non_unique="0" key_name="idp_url" column_name="idp_url" Collation="A" platform="WIN"/>
-    <index table="SSOBranding" non_unique="0" key_name="http_request_domain" column_name="http_request_domain" Collation="A" platform="WIN"/>
   </table>
   <table name="stat">
     <description>[Unnecessary?]</description>
@@ -3932,15 +2980,6 @@
     <index table="web_users" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="web_users" non_unique="0" key_name="sys_user_id" column_name="sys_user_id" Collation="A"/>
     <index table="web_users" non_unique="1" key_name="dom_id" column_name="dom_id" Collation="A"/>
-  </table>
-  <table name="WebApps">
-    <description>Tomcat apps</description>
-    <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="name" type="varchar(255)" null="YES"/>
-    <column name="status" type="int(10)" default="0"/>
-    <column name="domain_service_id" type="int(10) unsigned" default="0" foreign_key="DomainServices.id"/>
-    <index table="WebApps" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
-    <index table="WebApps" non_unique="1" key_name="domain_service_id" column_name="domain_service_id" Collation="A"/>
   </table>
   <table name="PersistentCache">
     <description>File based cache links</description>
@@ -4159,6 +3198,7 @@
     <column name="name" type="varchar(255)" null="YES"/>
     <column name="isBuiltIn" type="int(11)" null="YES" default="0"/>
     <column name="ownerId" type="int(11)" null="YES" foreign_key="clients.id" delete_cascade="YES"/>
+    <column name="isActivationRequired" type="int(1)" default="0"/>
     <index table="smb_roles" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="smb_roles" non_unique="1" key_name="ownerId_idx" column_name="ownerId" Collation="A"/>
   </table>
@@ -4280,10 +3320,6 @@
       <field name="code" value="dnsManagement"/>
     </row>
     <row>
-      <field name="id" value="16"/>
-      <field name="code" value="javaApplicationsManagement"/>
-    </row>
-    <row>
       <field name="id" value="17"/>
       <field name="code" value="mailManagement"/>
     </row>
@@ -4388,12 +3424,6 @@
       <field name="id" value="115"/>
       <field name="roleId" value="1"/>
       <field name="generalPermissionId" value="15"/>
-      <field name="isAllowed" value="1"/>
-    </row>
-    <row>
-      <field name="id" value="116"/>
-      <field name="roleId" value="1"/>
-      <field name="generalPermissionId" value="16"/>
       <field name="isAllowed" value="1"/>
     </row>
     <row>
@@ -4626,7 +3656,7 @@
     <row>
       <field name="id" value="25"/>
       <field name="name" value="spamAction"/>
-      <field name="value" value="move"/>
+      <field name="value" value="text"/>
     </row>
     <row>
       <field name="id" value="26"/>
