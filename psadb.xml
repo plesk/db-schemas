@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Copyright 1999-2021. Plesk International GmbH. All rights reserved. -->
+<!-- Copyright 1999-2022. Plesk International GmbH. All rights reserved. -->
 <pleskdb version="8.2">
   <table name="accounts">
     <description>Storage of passwords for different types of accounts</description>
@@ -125,7 +125,7 @@
   <table name="apsContextsApplications">
     <description>Set of shared APS controller application resources IDs linked to hosting contexts</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="apsContextId" type="int(10) unsigned" foreign_key="apsContexts.id"/>
+    <column name="apsContextId" type="int(10) unsigned" foreign_key="apsContexts.id" delete_cascade="YES"/>
     <!-- references apsc.aps_registry_object.uid and apsc.aps_registry_object.type=='aps.application' -->
     <column name="registryApplicationId" type="varchar(36)"/>
     <index table="apsContextsApplications" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
@@ -168,7 +168,7 @@
   <table name="anon_ftp">
     <description>Anonymous virtual FTP domain information</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id"/>
+    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id" delete_cascade="YES"/>
     <column name="max_conn" type="int(10) unsigned" null="YES"/>
     <column name="bandwidth" type="int(10) unsigned" null="YES"/>
     <column name="incoming" type="enum('false','true')" default="false"/>
@@ -417,8 +417,8 @@
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
     <column name="name" type="varchar(64)"/>
     <column name="type" type="enum('mysql','postgresql','mssql')" default="mysql"/>
-    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id"/>
-    <column name="db_server_id" type="int(10) unsigned" foreign_key="DatabaseServers.id"/>
+    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id" delete_cascade="YES"/>
+    <column name="db_server_id" type="int(10) unsigned" foreign_key="DatabaseServers.id" delete_cascade="YES"/>
     <column name="default_user_id" type="int(10) unsigned" null="YES" foreign_key="db_users.id"/>
     <column name="external_id" type="varchar(255)" null="YES"/>
     <index table="data_bases" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
@@ -461,8 +461,8 @@
     <column name="account_id" type="int(10) unsigned" foreign_key="accounts.id"/>
     <column name="db_id" type="int(10) unsigned" default="0" foreign_key="data_bases.id"/>
     <column name="status" type="enum('normal','orphaned')" default="normal"/>
-    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id"/>
-    <column name="db_server_id" type="int(10) unsigned" default="0" foreign_key="DatabaseServers.id"/>
+    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id" delete_cascade="YES"/>
+    <column name="db_server_id" type="int(10) unsigned" default="0" foreign_key="DatabaseServers.id" delete_cascade="YES"/>
     <column name="passwd" type="varchar(16)" platform="LINUX"/>
     <column name="external_id" type="varchar(255)" null="YES"/>
     <column name="role" type="varchar(255)" default="readWrite"/>
@@ -715,6 +715,15 @@
       <field name="displayVal" value="v=DMARC1; p=none"/>
       <field name="opt" value=""/>
     </row>
+    <row>
+      <field name="id" value="21"/>
+      <field name="type" value="CNAME"/>
+      <field name="host" value="www.&lt;domain&gt;."/>
+      <field name="displayHost" value="www.&lt;domain&gt;."/>
+      <field name="val" value="&lt;domain&gt;."/>
+      <field name="displayVal" value="&lt;domain&gt;."/>
+      <field name="opt" value=""/>
+    </row>
   </table>
   <table name="dns_refs" platform="LINUX">
     <description>DNS resource references</description>
@@ -767,7 +776,7 @@
   <table name="domain_aliases">
     <description>Domain aliases</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id"/>
+    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id" delete_cascade="YES"/>
     <column name="name" type="varchar(255)"/>
     <column name="displayName" type="varchar(255)"/>
     <column name="dns_zone_id" type="int(10) unsigned" null="YES" foreign_key="dns_zone.id"/>
@@ -844,6 +853,7 @@
     <column name="gl_filter" type="enum('on','off')" default="on" platform="LINUX"/>
     <column name="icpStatus" type="int(1)" default="0"/>
     <column name="icpPermit" type="varchar(255)" null="YES"/>
+    <column name="monthlyTraffic" type="bigint(20) unsigned" default="0"/>
     <index table="domains" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="domains" non_unique="0" key_name="name" column_name="name" Collation="A"/>
     <index table="domains" non_unique="1" key_name="displayName" column_name="displayName" Collation="A"/>
@@ -858,11 +868,12 @@
     <index table="domains" non_unique="1" key_name="limits_id" column_name="limits_id" Collation="A"/>
     <index table="domains" non_unique="1" key_name="params_id" column_name="params_id" Collation="A"/>
     <index table="domains" key_name="guid" column_name="guid" non_unique="0" Collation="A"/>
+    <index table="domains" key_name="monthlyTraffic" column_name="monthlyTraffic" non_unique="1" Collation="A"/>
   </table>
   <table name="DomainServices">
     <description>Services available on domain. Service parameters are stored in Parameters</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id"/>
+    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id" delete_cascade="YES"/>
     <column name="type" type="enum('mail','tomcat','maillists','web')" null="YES"/>
     <column name="status" type="bigint(20)" default="0"/>
     <column name="parameters_id" type="int(10) unsigned" default="0" foreign_key="Parameters.id"/>
@@ -902,7 +913,7 @@
   </table>
   <table name="DynamicIpSecurity">
     <description>IIS 8.0 dynamic IP address restrictions</description>
-    <column name="dom_id" type="int(10) unsigned" foreign_key="domains.id"/>
+    <column name="dom_id" type="int(10) unsigned" foreign_key="domains.id" delete_cascade="YES"/>
     <column name="isDenyByConcurrentRequests" type="int(11)" default="0"/>
     <column name="maxConcurrentRequests" type="int(10) unsigned" default="5"/>
     <column name="isDenyByRequestRate" type="int(11)" default="0"/>
@@ -985,7 +996,7 @@
   </table>
   <table name="forwarding">
     <description>Destination URLs for standard forwarding and frame forwarding</description>
-    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id"/>
+    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id" delete_cascade="YES"/>
     <column name="redirect" type="varchar(255)" null="YES"/>
     <column name="http_code" type="int(10) unsigned" default="301"/>
     <column name="ssl" type="enum('true','false')" default="false"/>
@@ -997,8 +1008,8 @@
   <table name="ftp_users">
     <description>Additional ftp users</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id"/>
-    <column name="sys_user_id" type="int(10) unsigned" default="0" foreign_key="sys_users.id"/>
+    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id" delete_cascade="YES"/>
+    <column name="sys_user_id" type="int(10) unsigned" default="0" foreign_key="sys_users.id" delete_cascade="YES"/>
     <!-- Bit mask. only Windows -->
     <column name="permission" type="bigint(20) unsigned" default="0"/>
     <column name="external_id" type="varchar(255)" null="YES"/>
@@ -1112,7 +1123,7 @@
   </table>
   <table name="hosting">
     <description>Physical hosting</description>
-    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id"/>
+    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id" delete_cascade="YES"/>
     <column name="sys_user_id" type="int(10) unsigned" default="0" foreign_key="sys_users.id"/>
     <column name="real_traffic" type="bigint(20) unsigned" null="YES" default="0"/>
     <column name="ssi" type="enum('false','true')" default="false"/>
@@ -1194,8 +1205,8 @@
   </table>
   <table name="IisAppPoolDomains">
     <description>IIS domain-pool connections</description>
-    <column name="domainId" type="int(10) unsigned" foreign_key="domains.id"/>
-    <column name="poolId" type="int(10) unsigned" foreign_key="IisAppPools.id"/>
+    <column name="domainId" type="int(10) unsigned" foreign_key="domains.id" delete_cascade="YES"/>
+    <column name="poolId" type="int(10) unsigned" foreign_key="IisAppPools.id" delete_cascade="YES"/>
     <index table="IisAppPoolDomains" non_unique="0" key_name="PRIMARY" column_name="domainId" Collation="A"/>
     <index table="IisAppPoolDomains" non_unique="1" key_name="poolId" column_name="poolId" Collation="A"/>
   </table>
@@ -1221,7 +1232,7 @@
     <description>IP pool</description>
     <column name="id" type="int(10) unsigned" platform="WIN"/>
     <column name="id" type="int(10) unsigned" extra="auto_increment" platform="LINUX"/>
-    <column name="ip_address_id" type="int(10) unsigned" foreign_key="IP_Addresses.id"/>
+    <column name="ip_address_id" type="int(10) unsigned" foreign_key="IP_Addresses.id" delete_cascade="YES"/>
     <column name="type" type="enum('shared','exclusive')" default="shared"/>
     <index table="ip_pool" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="ip_pool" non_unique="0" key_name="PRIMARY" column_name="ip_address_id" Collation="A"/>
@@ -1345,6 +1356,7 @@
     <column name="finishTime" type="timestamp" null="YES"/>
     <column name="pid" type="int(10) unsigned" default="0"/>
     <column name="externalId" type="varchar(255)" null="YES"/>
+    <column name="updateTime" type="datetime" default="1970-01-01 00:00:00"/>
     <index table="longtasks" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
   </table>
   <table name="longtaskparams">
@@ -1361,12 +1373,13 @@
     <column name="userId" type="int(10) unsigned" null="YES" foreign_key="smb_users.id"/>
     <column name="mail_name" type="varchar(245)"/>
     <column name="postbox" type="enum('false','true')" default="false"/>
+    <column name="delivery" type="enum('false','true')" default="true"/>
     <column name="account_id" type="int(10) unsigned" default="0" foreign_key="accounts.id"/>
     <column name="mail_group" type="enum('false','true')" default="false"/>
     <column name="autoresponder" type="enum('false','true')" default="false"/>
     <column name="mbox_quota" type="bigint(20)" default="-1"/>
     <column name="description" type="varchar(255)" null="YES"/>
-    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id"/>
+    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id" delete_cascade="YES"/>
     <column name="disk_usage" type="bigint(20) unsigned" default="0"/>
     <column name="perm_id" type="int(10) unsigned" default="0" foreign_key="Permissions.id"/>
     <column name="spamfilter" type="enum('false','true')" default="true" platform="LINUX"/>
@@ -1381,7 +1394,7 @@
   <table name="mail_aliases">
     <description>Mail aliases</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="mn_id" type="int(10) unsigned" default="0" foreign_key="mail.id"/>
+    <column name="mn_id" type="int(10) unsigned" default="0" foreign_key="mail.id" delete_cascade="YES"/>
     <column name="alias" type="varchar(245)"/>
     <index table="mail_aliases" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="mail_aliases" non_unique="0" key_name="mn_id" column_name="mn_id" Collation="A"/>
@@ -1397,7 +1410,7 @@
   <table name="mail_redir">
     <description>Mail group members table</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="mn_id" type="int(10) unsigned" default="0" foreign_key="mail.id"/>
+    <column name="mn_id" type="int(10) unsigned" default="0" foreign_key="mail.id" delete_cascade="YES"/>
     <column name="address" type="varchar(245)"/>
     <index table="mail_redir" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="mail_redir" non_unique="0" key_name="mn_id" column_name="mn_id" Collation="A" platform="WIN"/>
@@ -1406,7 +1419,7 @@
   <table name="mail_resp">
     <description>Autoresponders</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="mn_id" type="int(10) unsigned" default="0" foreign_key="mail.id"/>
+    <column name="mn_id" type="int(10) unsigned" default="0" foreign_key="mail.id" delete_cascade="YES"/>
     <column name="resp_name" type="varchar(245)"/>
     <column name="keystr" type="varchar(255)" null="YES"/>
     <column name="key_where" type="enum('subj','body','no')" default="no"/>
@@ -1443,7 +1456,7 @@
   <table name="MailLists">
     <description>Mail lists</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id"/>
+    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id" delete_cascade="YES"/>
     <column name="name" type="varchar(255)"/>
     <column name="status" type="bigint(20) unsigned" default="0"/>
     <column name="admin_email" type="varchar(255)" null="YES" platform="WIN"/>
@@ -1612,14 +1625,6 @@
       <field name="param" value="multiply_login"/>
       <field name="val" value="true"/>
     </row>
-    <row platform="WIN">
-      <field name="param" value="restart_apache_interval"/>
-      <field name="val" value="900"/>
-    </row>
-    <row platform="LINUX">
-      <field name="param" value="restart_apache_interval"/>
-      <field name="val" value="0"/>
-    </row>
     <row platform="LINUX">
       <field name="param" value="restart_apache_gracefully"/>
       <field name="val" value="true"/>
@@ -1787,6 +1792,8 @@
     <column name="isViewed" type="int(1)" default="0"/>
     <column name="code" type="varchar(255)"/>
     <column name="openInNewTab" type="int(1)" default="0"/>
+    <column name="messageKey" type="varchar(255)" null="YES"/>
+    <column name="isPromotion" type="int(1)" default="0"/>
     <index table="PanelNotificationMessages" key_name="PRIMARY" column_name="id" non_unique="0" Collation="A"/>
     <index table="PanelNotificationMessages" key_name="clientId" column_name="clientId" non_unique="1" Collation="A"/>
     <index table="PanelNotificationMessages" key_name="adminAliasId" column_name="adminAliasId" non_unique="1" Collation="A"/>
@@ -1840,7 +1847,7 @@
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
     <column name="login" type="varchar(32)"/>
     <column name="account_id" type="int(10) unsigned" default="0" foreign_key="accounts.id"/>
-    <column name="pd_id" type="int(10) unsigned" default="0" foreign_key="protected_dirs.id"/>
+    <column name="pd_id" type="int(10) unsigned" default="0" foreign_key="protected_dirs.id" delete_cascade="YES"/>
     <index table="pd_users" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="pd_users" non_unique="0" key_name="pd_id" column_name="pd_id" Collation="A"/>
     <index table="pd_users" non_unique="0" key_name="pd_id" column_name="login" Collation="A"/>
@@ -1899,7 +1906,7 @@
     <description>Schema versions storage</description>
     <column name="version" type="varchar(14)"/>
     <row>
-      <field name="version" value="20210118143212"/>
+      <field name="version" value="20220926114840"/>
     </row>
   </table>
   <table name="SecretKeys">
@@ -1908,8 +1915,10 @@
     <column name="clientId" type="int(10) unsigned" null="YES" foreign_key="clients.id" delete_cascade="YES"/>
     <column name="hash" type="varchar(255)"/>
     <column name="description" type="varchar(255)"/>
+    <column name="lookupId" type="varchar(8)"/>
     <index table="SecretKeys" key_name="PRIMARY" column_name="id" non_unique="0" Collation="A"/>
     <index table="SecretKeys" key_name="clientId" column_name="clientId" non_unique="1" Collation="A"/>
+    <index table="SecretKeys" key_name="lookupId" column_name="lookupId" non_unique="1" Collation="A"/>
   </table>
   <table name="SecretKeysIpAddresses">
     <description>Secret keys ip addresses lists</description>
@@ -2013,7 +2022,7 @@
     <column name="ssl" type="enum('false','true')" default="false"/>
     <column name="realm" type="varchar(255)" null="YES"/>
     <column name="path" type="varchar(245)"/>
-    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id"/>
+    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id" delete_cascade="YES"/>
     <column name="dom_type" type="enum('domain','subdomain')" default="domain"/>
     <column name="cgi_bin" type="enum('false','true')" default="false" platform="LINUX"/>
     <index table="protected_dirs" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
@@ -2073,7 +2082,7 @@
   <table name="resp_attach">
     <description>Attachment files for autoresponders</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="rn_id" type="int(10) unsigned" default="0" foreign_key="mail_resp.id"/>
+    <column name="rn_id" type="int(10) unsigned" default="0" foreign_key="mail_resp.id" delete_cascade="YES"/>
     <column name="filename" type="varchar(245)"/>
     <index table="resp_attach" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="resp_attach" non_unique="0" key_name="rn_id" column_name="rn_id" Collation="A"/>
@@ -2082,7 +2091,7 @@
   <table name="resp_forward">
     <description>Request forwarding addresses for autoresponders</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="rn_id" type="int(10) unsigned" default="0" foreign_key="mail_resp.id"/>
+    <column name="rn_id" type="int(10) unsigned" default="0" foreign_key="mail_resp.id" delete_cascade="YES"/>
     <column name="address" type="varchar(245)"/>
     <index table="resp_forward" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="resp_forward" non_unique="0" key_name="rn_id" column_name="rn_id" Collation="A" platform="WIN"/>
@@ -2538,7 +2547,7 @@
   <table name="SBResellers" platform="LINUX">
     <description>SiteBuilder resellers</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="client_id" type="int(10) unsigned" foreign_key="clients.id"/>
+    <column name="client_id" type="int(10) unsigned" foreign_key="clients.id" delete_cascade="YES"/>
     <column name="sb_client_login" type="varchar(255)"/>
     <column name="sb_reseller_id" type="varchar(255)"/>
     <index table="SBResellers" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
@@ -2569,7 +2578,7 @@
   <table name="ServiceNodeCertificates">
     <description>Service node SSL certificates</description>
     <column name="serviceNodeId" type="int(10) unsigned" foreign_key="ServiceNodes.id" delete_cascade="YES"/>
-    <column name="certificateId" type="int(10) unsigned" foreign_key="certificates.id"/>
+    <column name="certificateId" type="int(10) unsigned" foreign_key="certificates.id" delete_cascade="YES"/>
     <column name="certFile" type="varchar(255)" null="YES"/>
     <column name="caFile" type="varchar(255)" null="YES"/>
     <index table="ServiceNodeCertificates" non_unique="0" key_name="PRIMARY" column_name="serviceNodeId" Collation="A"/>
@@ -2684,12 +2693,6 @@
       <field name="name" value="spamfilter_max_children"/>
       <field name="value" value="5"/>
     </row>
-    <row platform="LINUX">
-      <field name="serviceNodeId" value="1"/>
-      <field name="section" value="mailServer"/>
-      <field name="name" value="virusfilter"/>
-      <field name="value" value="drweb"/>
-    </row>
     <row>
       <field name="serviceNodeId" value="1"/>
       <field name="section" value="dnsConnector"/>
@@ -2769,6 +2772,15 @@
     <column name="lock_time" type="datetime" null="YES"/>
     <column name="serviceNodeId" type="int(10) unsigned" default="1" foreign_key="ServiceNodes.id"/>
     <index table="smtp_poplocks" non_unique="1" key_name="ip_address" column_name="ip_address" Collation="A"/>
+  </table>
+  <table name="SMTPWhitelists" platform="WIN">
+    <description>SMTP whitelists for MTA</description>
+    <column name="ip" type="varchar(45)"/>
+    <column name="prefix" type="int(10) unsigned" default="0"/>
+    <column name="type" type="enum('wildcard','cidr','single')" default="single"/>
+    <index table="SMTPWhitelists" non_unique="0" key_name="PRIMARY" column_name="ip" Collation="A"/>
+    <index table="SMTPWhitelists" non_unique="0" key_name="PRIMARY" column_name="prefix" Collation="A"/>
+    <index table="SMTPWhitelists" non_unique="0" key_name="PRIMARY" column_name="type" Collation="A"/>
   </table>
   <table name="spamfilter" platform="LINUX">
     <description>Spam filter settings</description>
@@ -2951,8 +2963,8 @@
   <table name="web_users">
     <description>Web users</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id"/>
-    <column name="sys_user_id" type="int(10) unsigned" default="0" foreign_key="sys_users.id"/>
+    <column name="dom_id" type="int(10) unsigned" default="0" foreign_key="domains.id" delete_cascade="YES"/>
+    <column name="sys_user_id" type="int(10) unsigned" default="0" foreign_key="sys_users.id" delete_cascade="YES"/>
     <column name="ssi" type="enum('false','true')" default="false"/>
     <column name="ssi_html" type="enum('false','true')" default="false"/>
     <column name="php" type="enum('false','true')" default="false"/>
@@ -3092,7 +3104,7 @@
     <description>APS application context</description>
     <column name="id" type="int(11)" extra="auto_increment"/>
     <column name="contextType" type="int(11)" null="YES" default="0"/>
-    <column name="packageId" type="int(11)" foreign_key="smb_apsPackages.id"/>
+    <column name="packageId" type="int(11)" foreign_key="smb_apsPackages.id" delete_cascade="YES"/>
     <column name="requirementContextClass" type="varchar(255)" null="YES"/>
     <column name="requirementContextId" type="varchar(255)" null="YES"/>
     <index table="smb_apsContexts" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
@@ -3118,9 +3130,9 @@
   <table name="smb_apsInstances">
     <description>Installed instances of APS applications</description>
     <column name="id" type="int(11)" extra="auto_increment"/>
-    <column name="parentContextId" type="int(11)" foreign_key="smb_apsContexts.id"/>
-    <column name="contextId" type="int(11)" foreign_key="smb_apsContexts.id"/>
-    <column name="metaId" type="int(11)" foreign_key="smb_apsMetas.id"/>
+    <column name="parentContextId" type="int(11)" foreign_key="smb_apsContexts.id" delete_cascade="YES"/>
+    <column name="contextId" type="int(11)" foreign_key="smb_apsContexts.id" delete_cascade="YES"/>
+    <column name="metaId" type="int(11)" foreign_key="smb_apsMetas.id" delete_cascade="YES"/>
     <column name="uuid" type="varchar(255)" null="YES"/>
     <!-- references apsc.aps_registry_object.uid and apsc.aps_registry_object.type=='aps.resource' -->
     <column name="registryResourceId" type="varchar(36)" null="YES"/>
@@ -3428,7 +3440,7 @@
     <description>Instances of services</description>
     <column name="id" type="int(11)" extra="auto_increment"/>
     <column name="description" type="varchar(255)" null="YES"/>
-    <column name="serviceProviderId" type="int(11)" foreign_key="smb_serviceProviders.id"/>
+    <column name="serviceProviderId" type="int(11)" foreign_key="smb_serviceProviders.id" delete_cascade="YES"/>
     <!-- when service provider class is Smb_Service_Provider_Aps references apsc.aps_registry_object.uid and apsc.aps_registry_object.type=='aps.resource' -->
     <column name="externalId" type="varchar(255)" null="YES"/>
     <index table="smb_serviceInstances" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
@@ -3462,11 +3474,6 @@
     <column name="roleId" type="int(11)" foreign_key="smb_roles.id" delete_cascade="YES"/>
     <column name="servicePermissionId" type="int(11)" foreign_key="smb_servicePermissions.id" delete_cascade="YES"/>
     <index table="smb_roleServicePermissions" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
-    <row>
-      <field name="id" value="1"/>
-      <field name="roleId" value="1"/>
-      <field name="servicePermissionId" value="1"/>
-    </row>
   </table>
   <table name="smb_userServicePermissions">
     <description>Permissions of user to access service</description>
@@ -3615,5 +3622,20 @@
     <column name="status" type="enum('new','error','skip','success')" default="new"/>
     <column name="message" type="varchar(255)" null="YES"/>
     <index table="BlUpgradeActions" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
+  </table>
+  <table name="WebsitesDiagnostic">
+    <description>Websites diagnostic checks results</description>
+    <column name="id" type="int(10) unsigned" extra="auto_increment"/>
+    <column name="type" type="enum('regular','manual')" default="regular"/>
+    <column name="date" type="timestamp" default="CURRENT_TIMESTAMP"/>
+    <column name="depth" type="int(11) unsigned" default="0"/>
+    <column name="duration" type="int(11) unsigned" default="0"/>
+    <column name="problems" type="mediumblob" null="YES"/>
+    <index table="WebsitesDiagnostic" key_name="PRIMARY" column_name="id" non_unique="0" Collation="A"/>
+  </table>
+  <table name="WebsitesDiagnosticDomains">
+    <description>Websites diagnostic checks related domains</description>
+    <column name="websitesDiagnosticId" type="int(10) unsigned" foreign_key="WebsitesDiagnostic.id" delete_cascade="YES"/>
+    <column name="domainId" type="int(10) unsigned" foreign_key="domains.id" delete_cascade="YES"/>
   </table>
 </pleskdb>
