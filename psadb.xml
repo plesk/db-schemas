@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Copyright 1999-2022. Plesk International GmbH. All rights reserved. -->
+<!-- Copyright 1999-2023. Plesk International GmbH. All rights reserved. -->
 <pleskdb version="8.2">
   <table name="accounts">
     <description>Storage of passwords for different types of accounts</description>
@@ -711,8 +711,8 @@
       <field name="type" value="TXT"/>
       <field name="host" value="_dmarc.&lt;domain&gt;."/>
       <field name="displayHost" value="_dmarc.&lt;domain&gt;."/>
-      <field name="val" value="v=DMARC1; p=none"/>
-      <field name="displayVal" value="v=DMARC1; p=none"/>
+      <field name="val" value="v=DMARC1; p=quarantine; adkim=s; aspf=s"/>
+      <field name="displayVal" value="v=DMARC1; p=quarantine; adkim=s; aspf=s"/>
       <field name="opt" value=""/>
     </row>
     <row>
@@ -1906,7 +1906,7 @@
     <description>Schema versions storage</description>
     <column name="version" type="varchar(14)"/>
     <row>
-      <field name="version" value="20220926114840"/>
+      <field name="version" value="20230215172324"/>
     </row>
   </table>
   <table name="SecretKeys">
