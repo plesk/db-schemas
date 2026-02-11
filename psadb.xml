@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Copyright 1999-2023. Plesk International GmbH. All rights reserved. -->
+<!-- Copyright 1999-2026. WebPros International GmbH. All rights reserved. -->
 <pleskdb version="8.2">
   <table name="accounts">
     <description>Storage of passwords for different types of accounts</description>
@@ -23,14 +23,17 @@
     <column name="aemail" type="varchar(255)"/>
     <column name="comments" type="varchar(255)"/>
     <column name="status" type="bigint(20) unsigned" default="0"/>
+    <column name="creationDate" type="varchar(25)" default="1970-01-01T00:00:00+00:00"/>
+    <column name="uuid" type="varchar(36)" default=""/>
     <index table="admin_aliases" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="admin_aliases" non_unique="0" key_name="login" column_name="login" Collation="A"/>
+    <index table="admin_aliases" key_name="uuid" column_name="uuid" non_unique="0" Collation="A"/>
   </table>
   <table name="admin_aliases_param">
     <description>Additional admin key-value params</description>
     <column name="alias_id" type="int(10) unsigned" default="0" foreign_key="admin_aliases.id" delete_cascade="YES"/>
     <column name="param" type="varchar(245)"/>
-    <column name="val" type="varchar(255)" null="YES"/>
+    <column name="val" type="varchar(5000)" null="YES"/>
     <index table="admin_aliases_param" non_unique="0" key_name="PRIMARY" column_name="alias_id" Collation="A"/>
     <index table="admin_aliases_param" non_unique="0" key_name="PRIMARY" column_name="param" Collation="A"/>
   </table>
@@ -225,6 +228,10 @@
     <column name="backupExcludeFilesId" type="int(10) unsigned" null="YES" foreign_key="BackupExcludeFiles.id" delete_cascade="YES"/>
     <column name="backupExcludeLogs" type="int(1)" default="0"/>
     <column name="remoteStorage" type="varchar(255)" null="YES"/>
+    <column name="exclude_mail" type="int(1)" default="0"/>
+    <column name="exclude_user_files" type="int(1)" default="0"/>
+    <column name="exclude_user_databases" type="int(1)" default="0"/>
+    <column name="last_validation_time" type="date" null="YES"/>
     <index table="BackupsScheduled" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
   </table>
   <table name="BackupsSettings">
@@ -479,7 +486,7 @@
     <column name="mask" type="varchar(15)"/>
     <column name="type" type="enum('allow','deny')"/>
     <column name="databaseUserId" type="int(10) unsigned" foreign_key="db_users.id" delete_cascade="YES"/>
-    <column name="firewallRuleId" type="varchar(255)" null="YES" foreign_key="module_firewall_rules.id"/>
+    <column name="firewallRuleId" type="varchar(255)" null="YES"/>
     <index table="DatabaseUserRemoteAccessRules" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
   </table>
   <table name="disk_usage">
@@ -493,6 +500,7 @@
     <column name="logs" type="bigint(20) unsigned" null="YES" default="0"/>
     <column name="mysql_dbases" type="bigint(20) unsigned" default="0"/>
     <column name="mssql_dbases" type="bigint(20) unsigned" default="0"/>
+    <column name="pgsql_dbases" type="bigint(20) unsigned" default="0"/>
     <column name="mailboxes" type="bigint(20) unsigned" null="YES" default="0"/>
     <column name="maillists" type="bigint(20) unsigned" null="YES" default="0"/>
     <column name="domaindumps" type="bigint(20) unsigned" null="YES" default="0"/>
@@ -506,7 +514,7 @@
     <description>DNS resource records</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
     <column name="dns_zone_id" type="int(10) unsigned" null="YES" foreign_key="dns_zone.id" delete_cascade="YES"/>
-    <column name="type" type="enum('NS','A','AAAA','CNAME','MX','PTR','TXT','AXFR','SRV','DS','CAA','master','none')" default="A"/>
+    <column name="type" type="enum('NS','A','AAAA','CNAME','MX','PTR','TXT','AXFR','SRV','DS','CAA','TLSA','HTTPS','master','none')" default="A"/>
     <column name="host" type="varchar(255)"/>
     <column name="displayHost" type="varchar(255)"/>
     <column name="val" type="text"/>
@@ -524,7 +532,7 @@
   <table name="dns_recs_t">
     <description>DNS resource records templates</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="type" type="enum('NS','A','AAAA','CNAME','MX','PTR','SOA','TXT','AXFR','SRV','CAA','none')" default="A"/>
+    <column name="type" type="enum('NS','A','AAAA','CNAME','MX','PTR','SOA','TXT','AXFR','SRV','CAA','TLSA','none')" default="A"/>
     <column name="host" type="varchar(255)"/>
     <column name="displayHost" type="varchar(255)"/>
     <column name="val" type="text"/>
@@ -804,6 +812,15 @@
     <index table="DomainAliasesParameters" key_name="PRIMARY" column_name="aliasId" non_unique="0" Collation="A"/>
     <index table="DomainAliasesParameters" key_name="PRIMARY" column_name="param" non_unique="0" Collation="A"/>
   </table>
+  <table name="DomainKeys">
+    <description>DSMail key storage</description>
+    <column name="domainServiceId" type="int(10) unsigned" foreign_key="DomainServices.id" delete_cascade="YES"/>
+    <column name="selector" type="varchar(255)"/>
+    <column name="privateKey" type="blob" null="YES"/>
+    <column name="publicKey" type="blob" null="YES"/>
+    <index table="DomainKeys" key_name="PRIMARY" column_name="domainServiceId" non_unique="0" Collation="A"/>
+    <index table="DomainKeys" key_name="PRIMARY" column_name="selector" non_unique="0" Collation="A"/>
+  </table>
   <table name="DomainOutgoingMessagesPeaks">
     <description>Outgoing antispam per domain stats</description>
     <column name="domainId" type="int(10) unsigned" foreign_key="domains.id" delete_cascade="YES"/>
@@ -993,6 +1010,13 @@
     <column name="enabled" type="int(10)" default="0"/>
     <index table="externalWebmails" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="externalWebmails" non_unique="0" key_name="name" column_name="name" Collation="A"/>
+  </table>
+  <table name="Fail2BanIps">
+    <description>Permanently banned IPs</description>
+    <column name="jail" type="varchar(20)"/>
+    <column name="address" type="varchar(240)"/>
+    <index table="Fail2BanIps" key_name="PRIMARY" column_name="jail" non_unique="0" Collation="A"/>
+    <index table="Fail2BanIps" key_name="PRIMARY" column_name="address" non_unique="0" Collation="A"/>
   </table>
   <table name="forwarding">
     <description>Destination URLs for standard forwarding and frame forwarding</description>
@@ -1198,6 +1222,7 @@
     <column name="managedPipelineMode" type="enum('Classic','Integrated')" default="Integrated"/>
     <column name="externalId" type="varchar(255)" null="YES"/>
     <column name="enable32bitAppOnWin64" type="int(1)" default="1"/>
+    <column name="loadUserProfile" type="int(1)" default="0"/>
     <index table="IisAppPools" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="IisAppPools" non_unique="0" key_name="ownerId" column_name="serviceNodeId" Collation="A"/>
     <index table="IisAppPools" non_unique="0" key_name="ownerId" column_name="ownerType" Collation="A"/>
@@ -1302,13 +1327,19 @@
   <table name="log_actions">
     <description>Logged actions</description>
     <column name="id" type="int(10) unsigned" extra="auto_increment"/>
-    <column name="date" type="datetime" null="YES"/>
+    <column name="date" type="datetime(3)" null="YES"/>
     <column name="ip_address" type="varchar(39)"/>
     <column name="user" type="varchar(255)"/>
     <column name="object_id" type="int(10) unsigned" default="0"/>
     <column name="action_name" type="varchar(255)"/>
+    <column name="owner_id" type="int(10) unsigned" null="YES" foreign_key="clients.id"/>
     <index table="log_actions" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
     <index table="log_actions" key_name="action_name" column_name="action_name" non_unique="1" Collation="A"/>
+    <index table="log_actions" key_name="date" column_name="date" non_unique="1" Collation="A"/>
+    <index table="log_actions" key_name="owner_id_date" column_name="owner_id" non_unique="1" Collation="A"/>
+    <index table="log_actions" key_name="owner_id_date" column_name="date" non_unique="1" Collation="A"/>
+    <index table="log_actions" key_name="action_name_date" column_name="action_name" non_unique="1" Collation="A"/>
+    <index table="log_actions" key_name="action_name_date" column_name="date" non_unique="1" Collation="A"/>
   </table>
   <table name="log_components">
     <description>Logged action components</description>
@@ -1330,6 +1361,7 @@
     <column name="compress_enable" type="enum('false','true')" default="false"/>
     <column name="email" type="varchar(255)" null="YES"/>
     <column name="turned_on" type="enum('false','true')" default="false"/>
+    <column name="disabled_with_parent" type="int(1)" default="0"/>
     <index table="log_rotation" non_unique="0" key_name="PRIMARY" column_name="id" Collation="A"/>
   </table>
   <table name="Logos">
@@ -1613,6 +1645,10 @@
       <field name="param" value="include_mysql_databases"/>
       <field name="val" value="true"/>
     </row>
+    <row platform="WIN">
+      <field name="param" value="include_pgsql_databases"/>
+      <field name="val" value="true"/>
+    </row>
     <row>
       <field name="param" value="include_remote_databases"/>
       <field name="val" value="true"/>
@@ -1668,14 +1704,6 @@
     <row platform="LINUX">
       <field name="param" value="admin_password_encrypted"/>
       <field name="val" value="true"/>
-    </row>
-    <row platform="LINUX">
-      <field name="param" value="default_server_mysql"/>
-      <field name="val" value="1"/>
-    </row>
-    <row platform="LINUX">
-      <field name="param" value="default_server_postgresql"/>
-      <field name="val" value="2"/>
     </row>
     <row>
       <field name="param" value="soa_serial_format"/>
@@ -1835,7 +1863,7 @@
     <index table="password_secrets" non_unique="0" key_name="PRIMARY" column_name="secret" Collation="A"/>
   </table>
   <table name="bigparameters" platform="WIN">
-    <description>[Unnecessary?] DSMail key storage</description>
+    <description>DSMail key storage (deprecated)</description>
     <column name="id" type="int(10) unsigned"/>
     <column name="parameter" type="char(255)"/>
     <column name="value" type="blob" null="YES"/>
@@ -1906,7 +1934,7 @@
     <description>Schema versions storage</description>
     <column name="version" type="varchar(14)"/>
     <row>
-      <field name="version" value="20230215172324"/>
+      <field name="version" value="20260108144315"/>
     </row>
   </table>
   <table name="SecretKeys">
@@ -1926,6 +1954,16 @@
     <column name="ipAddress" type="varchar(39)"/>
     <index table="SecretKeysIpAddresses" key_name="PRIMARY" column_name="ipAddress" non_unique="0" Collation="A"/>
     <index table="SecretKeysIpAddresses" key_name="PRIMARY" column_name="keyId" non_unique="0" Collation="A"/>
+  </table>
+  <table name="Smarthosts">
+    <description>Smarthosts configurations</description>
+    <column name="id" type="int(10) unsigned" extra="auto_increment"/>
+    <column name="host" type="varchar(255)"/>
+    <column name="port" type="smallint(5) unsigned" default="0"/>
+    <column name="username" type="varchar(255)"/>
+    <column name="password" type="varchar(255)"/>
+    <column name="encryption" type="enum('on','off','tls','ssl')" null="YES"/>
+    <index table="Smarthosts" key_name="PRIMARY" column_name="id" non_unique="0" Collation="A"/>
   </table>
   <table name="Subscriptions">
     <description>Subscriptions</description>
@@ -2012,7 +2050,7 @@
   <table name="PleskStats">
     <description>Plesk key-value stats</description>
     <column name="param" type="varchar(255)"/>
-    <column name="value" type="blob" null="YES"/>
+    <column name="value" type="mediumblob" null="YES"/>
     <index table="PleskStats" non_unique="0" key_name="PRIMARY" column_name="param" Collation="A"/>
   </table>
   <table name="protected_dirs">
@@ -2510,6 +2548,9 @@
       <field name="id" value="99"/>
       <field name="name" value="360.cn"/>
     </row>
+    <row>
+      <field name="name" value="gmail.com"/>
+    </row>
   </table>
   <table name="sa_conf" platform="WIN">
     <description>Spamassassin configuration</description>
@@ -2726,7 +2767,9 @@
     <column name="login_time" type="int(10) unsigned" null="YES"/>
     <column name="modified" type="int(10) unsigned" null="YES"/>
     <column name="lifetime" type="int(10) unsigned" null="YES"/>
-    <index table="sessions" non_unique="0" key_name="PRIMARY" column_name="sess_id" Collation="A"/>
+    <column name="id" type="int(10) unsigned" extra="auto_increment"/>
+    <index table="sessions" key_name="PRIMARY" column_name="id" non_unique="0" Collation="A"/>
+    <index table="sessions" key_name="sess_id" column_name="sess_id" non_unique="0" Collation="A"/>
   </table>
   <table name="SessionContexts">
     <description>JSON encoded data stored in session</description>
